@@ -33,6 +33,10 @@ enum Quicknav {
         #[structopt(short="d", long="description")]
         description: Option<String>,
     },
+    Remove {
+        /// The shortcut to remove (by call)
+        shortcut: String
+    },
     /// Initalizes the shell profile
     Init {
         /// The shell profile to use
@@ -50,6 +54,9 @@ fn main() {
         },
         Quicknav::Add { shortcut, location, name, description } => {
             commands::add(shortcut, location, name, description);
+        },
+        Quicknav::Remove { shortcut } => {
+            commands::remove(shortcut)
         },
         Quicknav::Init { shell } => {
             commands::init(shell);
