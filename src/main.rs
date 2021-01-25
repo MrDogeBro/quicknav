@@ -33,6 +33,7 @@ enum Quicknav {
         #[structopt(short="d", long="description")]
         description: Option<String>,
     },
+    /// Removes a shortcut
     Remove {
         /// The shortcut to remove (by call)
         shortcut: String
