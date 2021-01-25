@@ -9,8 +9,7 @@ use structopt::StructOpt;
 
 #[derive(StructOpt)]
 enum Quicknav {
-    /// Gets the location to one of shortcuts if it exists
-    /// in the config file.
+    /// Gets the location of a provided shortcut
     Get {
         /// The location to find, known as a call in the
         /// config file
@@ -21,7 +20,7 @@ enum Quicknav {
         /// The shortcut to search for
         shortcut: Option<String>
     },
-    /// Initalizes the commands for the shell
+    /// Initalizes the shell profile
     Init {
         /// The shell profile to use
         shell: String
