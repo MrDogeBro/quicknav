@@ -17,7 +17,10 @@ enum Quicknav {
         location: String
     },
     /// Initalizes the commands for the shell
-    Init,
+    Init {
+        /// The shell profile to use
+        shell: String
+    },
 }
 
 fn main() {
@@ -25,8 +28,8 @@ fn main() {
         Quicknav::Get { location } => {
             commands::get(location);
         },
-        Quicknav::Init {} => {
-            commands::init();
+        Quicknav::Init { shell } => {
+            commands::init(shell);
         }
     }
 }
