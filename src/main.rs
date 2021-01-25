@@ -20,6 +20,19 @@ enum Quicknav {
         /// The shortcut to search for
         shortcut: Option<String>
     },
+    /// Adds a new shortcut
+    Add {
+        /// The shortcut itself (call)
+        shortcut: String,
+        /// The shortcut location
+        location: String,
+        /// The shortcut name
+        #[structopt(short="n", long="name")]
+        name: Option<String>,
+        /// The shortcut description
+        #[structopt(short="d", long="description")]
+        description: Option<String>,
+    },
     /// Initalizes the shell profile
     Init {
         /// The shell profile to use
@@ -34,6 +47,9 @@ fn main() {
         },
         Quicknav::List { shortcut } => {
             commands::list(shortcut);
+        },
+        Quicknav::Add { shortcut, location, name, description } => {
+            commands::add(shortcut, location, name, description);
         },
         Quicknav::Init { shell } => {
             commands::init(shell);
