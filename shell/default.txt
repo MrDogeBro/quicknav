@@ -5,14 +5,17 @@ function __quicknav_cd() {
 function __quicknav_nav() {
   if [ "$#" -eq 0 ]; then
     quicknav --help
+    exit 0
   else
     local __quicknav_result
     __quicknav_result="$(quicknav get "$@")"
 
-    if [[ $__quicknav_result == /* ]]; then
+    if $__quicknav_result; then
       __quicknav_cd "$__quicknav_result"
+      exit 0
     else
-      echo "\033[0;31m$__quicknav_result"
+      echo -e "$__quicknav_result"
+      exit 1
     fi
   fi
 }
