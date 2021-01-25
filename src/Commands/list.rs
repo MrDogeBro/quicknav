@@ -3,6 +3,7 @@ use std::env::var;
 use std::process::exit;
 use prettytable::{Table};
 use prettytable::format;
+use colored::*;
 
 #[derive(Serialize, Deserialize)]
 struct Shortcut {
@@ -38,6 +39,7 @@ pub fn list(shortcut: Option<String>) {
             }
         }
 
+        println!("{}{}", "Error: Could not find shortcut with a call of".red(), call.red());
         exit(1)
     } else {
         let config_folder = var("XDG_CONFIG_HOME").or_else(|_| var("HOME").map(|home|format!("{}/.config", home))).unwrap();
