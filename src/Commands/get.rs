@@ -3,6 +3,7 @@ use std::fs::File;
 use std::env::var;
 use std::path::Path;
 use std::process::exit;
+use colored::*;
 
 #[derive(Serialize, Deserialize)]
 struct Shortcut {
@@ -44,6 +45,6 @@ pub fn get(location: String) {
         }
     }
 
-    println!("Error: Navigation shortcut not found. Use quicknav list to view all your shortcuts.");
+    println!("{}", "Error: Navigation shortcut not found. Use quicknav list to view all your shortcuts.".red());
     exit(1)
 }
