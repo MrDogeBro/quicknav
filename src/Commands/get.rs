@@ -17,8 +17,8 @@ struct Config {
 }
 
 fn generate_config() {
-    let home = var("XDG_CONFIG_HOME").or_else(|_| var("HOME")).unwrap();
-    let config_path = format!("{}/.config/quicknav", home);
+    let config_folder = var("XDG_CONFIG_HOME").or_else(|_| var("HOME").map(|home|format!("{}/.config", home))).unwrap();
+    let config_path = format!("{}/quicknav", config_folder);
     fs::create_dir(&config_path).expect("Error: Unable to generate config directory.");
     fs::write(format!("{}/quicknav.json", &config_path), r#"{
     "shortcuts": []
@@ -26,8 +26,8 @@ fn generate_config() {
 }
 
 pub fn get(location: String) {
-    let home = var("XDG_CONFIG_HOME").or_else(|_| var("HOME")).unwrap();
-    let config_path = format!("{}/.config/quicknav/quicknav.json", home);
+    let config_folder = var("XDG_CONFIG_HOME").or_else(|_| var("HOME").map(|home|format!("{}/.config", home))).unwrap();
+    let config_path = format!("{}/quicknav/quicknav.json", config_folder);
 
     if !Path::new(&config_path).exists() {
         generate_config();
@@ -38,7 +38,7 @@ pub fn get(location: String) {
 
     for shortcut in config.shortcuts {
         if shortcut.calls.iter().any(|c| c == &location) {
-            return println!("{}", shortcut.location.replace("~", &home));
+            return println!("{}", shortcut.location.replace("~", &var("HOME").unwrap()));
         }
     }
     println!("Error: Navigation shortcut not found. Use quicknav list to view all your shortcuts.");
