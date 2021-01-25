@@ -2,6 +2,7 @@ use std::fs;
 use std::fs::File;
 use std::env::var;
 use std::path::Path;
+use std::process::exit;
 
 #[derive(Serialize, Deserialize)]
 struct Shortcut {
@@ -38,8 +39,11 @@ pub fn get(location: String) {
 
     for shortcut in config.shortcuts {
         if shortcut.calls.iter().any(|c| c == &location) {
-            return println!("{}", shortcut.location.replace("~", &var("HOME").unwrap()));
+            println!("{}", shortcut.location.replace("~", &var("HOME").unwrap()));
+            exit(0)
         }
     }
+
     println!("Error: Navigation shortcut not found. Use quicknav list to view all your shortcuts.");
+    exit(1)
 }
