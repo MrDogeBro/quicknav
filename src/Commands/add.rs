@@ -63,7 +63,7 @@ pub fn add(shortcut: String, location: String, name: Option<String>, description
     };
 
     config.shortcuts.push(new_shortcut);
-    fs::write(config_path, serde_json::to_string(&config).unwrap()).expect("Error: Unable to generate config.");
+    fs::write(config_path, serde_json::to_string(&config).unwrap()).expect("Error: Failed to write config to file.");
     println!("{} {}", "New shortcut added:".green(), &shortcut);
     exit(0)
 }
