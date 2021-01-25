@@ -16,6 +16,8 @@ enum Quicknav {
         /// config file
         location: String
     },
+    /// Lists the registered shortcuts
+    List,
     /// Initalizes the commands for the shell
     Init {
         /// The shell profile to use
@@ -27,6 +29,9 @@ fn main() {
     match Quicknav::from_args() {
         Quicknav::Get { location } => {
             commands::get(location);
+        },
+        Quicknav::List {} => {
+            commands::list();
         },
         Quicknav::Init { shell } => {
             commands::init(shell);
