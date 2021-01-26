@@ -1,13 +1,126 @@
 # Quicknav
 
-A quick and easy way to navigate your file system from the terminal.
+A way to quickly navigate your filesystem from the command line.
+
+## Table of Contents
+
+- [What is Quicknav](#what-is-quicknav)
+- [Why Quicknav](#why-quicknav)
+- [Examples](#examples)
+- [Getting Started](#getting-started)
+  - [Installing Quicknav](#installing-quicknav)
+  - [Adding Quicknav to Your Shell](#adding-quicknav-to-your-shell)
+- [Configuring Quicknav](#configuring-quicknav)
+  - [Adding and Removing Shortcuts](#adding-and-removing-shortcuts)
+  - [Init Flags](#init-flags)
+- [License](#license)
 
 ## What is Quicknav
 
 Quicknav is a command line tool that allows you to easily jump to specific locations in your filesystem
 from a simple command. Quicknav is built for terminal navigation on Unix operating systems.
 
+The tool is considered to be a **beta** level of readiness; its not completely done and it has not
+been heavily tested for bugs, but it is still ready to be used in a variety of workflows.
+
 ## Why Quicknav
 
 Quicknav allows you to easily set shortcuts to locations in your filesystem. It is made to speed up
 your terminal navigation to commonly accessed places without cluttering your terminal with aliases.
+
+## Examples
+
+```sh
+# easily navigate to shortcuts that were set in the config
+nav rs     # go to rust projects folder
+nav py     # go to python projects folder
+nav js     # go to javascript projects folder
+```
+
+## Getting Started
+
+### Installing Quicknav
+
+Currently, you can only download quicknav via cargo or by downloading the binary and adding it to your path.
+Support for other package managers such as Homebrew, the AUR, etc. is planned.
+
+Prebuilt binaries can be downloaded from the [GitHub releases page](https://github.com/MrDogeBro/quicknav/releases).
+
+Installing with cargo:
+
+```sh
+$ cargo install quicknav
+```
+
+### Adding Quicknav to Your Shell
+
+Adding quicknav to your shell is increadably easy. You just need to add the following line to your shells
+configuration file and replace `shell_name` with the name of your shell. Currently, only zsh and bash are
+supported but support for other shells such as fish are planned. Other shells may work if you use the
+bash shell profile.
+
+```sh
+eval "$(quicknav init shell_name)"
+```
+
+## Configuring Quicknav
+
+### Adding and Removing Shortcuts
+
+Adding and removing shortcuts is quite simple. You can either directly edit the configuration file or use the
+add and remove commands to do the same job. If you want the most configuration, then you will need to use the
+config file. The config file can be found at `~/.config/quicknav/quicknav.json` or if you have set the xdg
+config home, your config will be found at `$XDG_CONFIG_HOME/quicknav/quicknav.json`.
+
+The built in configuration commands are listed below. To get more info about a command, use the help command
+and specify which command you would like help for.
+
+```sh
+# display the help message for a command
+$ quicknav help command_name
+
+# list the registed shortcuts
+$ quicknav list [call]
+
+# add a new shortcut
+$ quicknav add <call> <location>
+
+# remove a shortcut
+$ quicknav remove <call>
+```
+
+If you would like to edit the configuration file directly, new shortcuts must follow the following json structure.
+You can add multiple calls (what you use to navigate to the location) but you are only required to include one.
+
+```json
+{
+  "name": "shortcut name",
+  "description": "shortcut description",
+  "location": "the location to jump to (~ supported)",
+  "calls": ["callname", "anothercall", "maybeevenanothercall"]
+}
+```
+
+Once you have added a shortcut, you can use the nav command to navigate to that shortcut by one of its calls.
+For example, if you want to go to the shortcut in the example above, we could use one of the following commands.
+
+```sh
+# uses the first call
+$ nav callname
+
+# uses the second call
+$ nav anothercall
+
+# uses the third call
+$ nav maybeevenanothercall
+```
+
+You can also check out the [example configuration](https://github.com/MrDogeBro/quicknav/blob/master/example-configuration.json).
+
+### Init Flags
+
+Currently, init flags are not supported but they are planned to be implimented in the future.
+
+## License
+
+Quicknav is licensed under an [MIT license](https://github.com/MrDogeBro/quicknav/blob/master/LICENSE).
