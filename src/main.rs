@@ -6,6 +6,7 @@ extern crate serde_json;
 mod commands;
 
 use structopt::StructOpt;
+use structopt::clap::Shell;
 
 #[derive(StructOpt)]
 enum Quicknav {
@@ -46,6 +47,7 @@ enum Quicknav {
 }
 
 fn main() {
+    // handle command dispatching
     match Quicknav::from_args() {
         Quicknav::Get { location } => {
             commands::get(location);
@@ -60,7 +62,17 @@ fn main() {
             commands::remove(shortcut)
         },
         Quicknav::Init { shell } => {
-            commands::init(shell);
+            commands::init(shell.to_owned());
+            gen_completions(shell);
         }
     }
+}
+
+fn gen_completions(shell: String) {
+    let mut shell_profile = Shell::Bash;
+
+    if shell == "bash" { shell_profile = Shell::Bash; }
+    else if shell == "zsh" { shell_profile = Shell::Bash; }
+
+    Quicknav::clap().gen_completions_to("quicknav", shell_profile, &mut std::io::stdout());
 }
