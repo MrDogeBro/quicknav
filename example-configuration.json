@@ -1,0 +1,22 @@
+{
+  "shortcuts": [
+    {
+      "name": "Config",
+      "description": "Takes you to the .config folder.",
+      "location": "~/.config",
+      "calls": ["config", "conf", "cf"]
+    },
+    {
+      "name": "Projects",
+      "description": "Takes you to the projects folder.",
+      "location": "~/Documents/Projects",
+      "calls": ["projects", "proj", "pj"]
+    },
+    {
+      "name": "Rust",
+      "description": "Takes you to the rust projects folder.",
+      "location": "~/Documents/Projects/Rust",
+      "calls": ["rust", "rs"]
+    }
+  ]
+}
