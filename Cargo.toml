@@ -1,7 +1,13 @@
 [package]
 name = "quicknav"
-version = "0.1.0"
+version = "0.1.0-beta.0"
 authors = ["MrDogeBro <MrDogeBro@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/MrDogeBro/quicknav"
+repository = "https://github.com/MrDogeBro/quicknav"
+keywords = ["quicknav", "nav", "navigation", "shortcuts", "files"]
+categories = "command-line-utilities"
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
