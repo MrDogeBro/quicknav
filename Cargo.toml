@@ -1,5 +1,6 @@
 [package]
 name = "quicknav"
+description = "A way to quickly navigate your filesystem from the command line."
 version = "0.1.0-beta.0"
 authors = ["MrDogeBro <MrDogeBro@users.noreply.github.com>"]
 license = "MIT"
