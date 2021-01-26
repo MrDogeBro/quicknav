@@ -7,7 +7,7 @@ readme = "README.md"
 homepage = "https://github.com/MrDogeBro/quicknav"
 repository = "https://github.com/MrDogeBro/quicknav"
 keywords = ["quicknav", "nav", "navigation", "shortcuts", "files"]
-categories = "command-line-utilities"
+categories = ["command-line-utilities"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
