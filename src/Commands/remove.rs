@@ -53,7 +53,7 @@ pub fn remove(shortcut: String) {
     }
 
     config.shortcuts.remove(index_to_remove);
-    fs::write(config_path, serde_json::to_string(&config).unwrap()).expect("Error: Failed to write config to file.");
+    fs::write(config_path, serde_json::to_string_pretty(&config).unwrap()).expect("Error: Failed to write config to file.");
     println!("{} {}", "Shortcut removed:".green(), &shortcut);
     exit(0)
 }
