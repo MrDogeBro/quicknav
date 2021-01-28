@@ -1,12 +1,14 @@
 extern crate serde;
 extern crate serde_json;
-#[macro_use] extern crate serde_derive;
-#[macro_use] extern crate prettytable;
+#[macro_use]
+extern crate serde_derive;
+#[macro_use]
+extern crate prettytable;
 
 mod commands;
 
-use structopt::StructOpt;
 use structopt::clap::Shell;
+use structopt::StructOpt;
 
 #[derive(StructOpt)]
 enum Quicknav {
@@ -14,12 +16,12 @@ enum Quicknav {
     Get {
         /// The location to find, known as a call in the
         /// config file
-        location: String
+        location: String,
     },
     /// Lists the registered shortcuts
     List {
         /// The shortcut to search for
-        shortcut: Option<String>
+        shortcut: Option<String>,
     },
     /// Adds a new shortcut
     Add {
@@ -28,21 +30,24 @@ enum Quicknav {
         /// The shortcut location
         location: String,
         /// The shortcut name
-        #[structopt(short="n", long="name")]
+        #[structopt(short = "n", long = "name")]
         name: Option<String>,
         /// The shortcut description
-        #[structopt(short="d", long="description")]
+        #[structopt(short = "d", long = "description")]
         description: Option<String>,
     },
     /// Removes a shortcut
     Remove {
         /// The shortcut to remove (by call)
-        shortcut: String
+        shortcut: String,
     },
     /// Initalizes the shell profile
     Init {
         /// The shell profile to use
-        shell: String
+        shell: String,
+        /// Optional way to change the invoke command
+        #[structopt(short = "c", long = "command")]
+        command: Option<String>,
     },
 }
 
@@ -51,18 +56,21 @@ fn main() {
     match Quicknav::from_args() {
         Quicknav::Get { location } => {
             commands::get(location);
-        },
+        }
         Quicknav::List { shortcut } => {
             commands::list(shortcut);
-        },
-        Quicknav::Add { shortcut, location, name, description } => {
+        }
+        Quicknav::Add {
+            shortcut,
+            location,
+            name,
+            description,
+        } => {
             commands::add(shortcut, location, name, description);
-        },
-        Quicknav::Remove { shortcut } => {
-            commands::remove(shortcut)
-        },
-        Quicknav::Init { shell } => {
-            commands::init(shell.to_owned());
+        }
+        Quicknav::Remove { shortcut } => commands::remove(shortcut),
+        Quicknav::Init { shell, command } => {
+            commands::init(shell.to_owned(), command);
             gen_completions(shell);
         }
     }
@@ -71,8 +79,11 @@ fn main() {
 fn gen_completions(shell: String) {
     let mut shell_profile = Shell::Bash;
 
-    if shell == "bash" { shell_profile = Shell::Bash; }
-    else if shell == "zsh" { shell_profile = Shell::Bash; }
+    if shell == "bash" {
+        shell_profile = Shell::Bash;
+    } else if shell == "zsh" {
+        shell_profile = Shell::Bash;
+    }
 
     Quicknav::clap().gen_completions_to("quicknav", shell_profile, &mut std::io::stdout());
 }
