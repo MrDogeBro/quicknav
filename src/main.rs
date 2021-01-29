@@ -70,8 +70,15 @@ fn main() {
         }
         Quicknav::Remove { shortcut } => commands::remove(shortcut),
         Quicknav::Init { shell, command } => {
-            commands::init(shell.to_owned(), command);
-            gen_completions(shell);
+            let supported_shells = vec!["bash", "zsh", "fish"];
+            if supported_shells.iter().any(|&s| s == shell) {
+                commands::init(shell.to_owned(), command);
+                gen_completions(shell);
+            } else {
+                println!(
+                    "echo -e \"\\033[0;31mError: Failed to load shell profile. Invalid or unsupported shell provided.\""
+                );
+            }
         }
     }
 }
@@ -83,6 +90,8 @@ fn gen_completions(shell: String) {
         shell_profile = Shell::Bash;
     } else if shell == "zsh" {
         shell_profile = Shell::Bash;
+    } else if shell == "fish" {
+        shell_profile = Shell::Fish;
     }
 
     Quicknav::clap().gen_completions_to("quicknav", shell_profile, &mut std::io::stdout());
