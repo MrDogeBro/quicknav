@@ -1,0 +1,24 @@
+function __quicknav_cd
+  cd $argv
+end
+
+function __quicknav_nav
+  if test (count $argv) -eq 0
+    quicknav --help
+    return 0
+  else
+    set -l __quicknav_result (quicknav get $argv)
+
+    if test $status -eq 0
+      __quicknav_cd $__quicknav_result
+      return 0
+    else
+      echo -e "\033[0;31m$__quicknav_result"
+      return 1
+    end
+  end
+end
+
+function nav
+  __quicknav_nav $argv
+end
