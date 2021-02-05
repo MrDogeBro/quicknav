@@ -55,12 +55,32 @@ $ cargo install quicknav
 ### Adding Quicknav to Your Shell
 
 Adding quicknav to your shell is increadably easy. You just need to add the following line to your shells
-configuration file and replace `shell_name` with the name of your shell. Currently, only zsh and bash are
-supported but support for other shells such as fish are planned. Other shells may work if you use the
-bash shell profile.
+configuration file and replace `shell_name` with the name of your shell. The shells listed below are the only
+shells that are currently supported. Other shells may work but are not guaranteed to. If you would like another
+shell to be supported, please head over to [feedback in the discussions tab](https://github.com/MrDogeBro/quicknav/discussions/categories/feedback).
 
-```sh
-eval "$(quicknav init shell_name)"
+##### Bash
+
+Add the following to your `~/.bashrc`
+
+```bash
+eval "$(quicknav init bash)"
+```
+
+##### Zsh
+
+Add the following to your `~/.zshrc`
+
+```zsh
+eval "$(quicknav init zsh)"
+```
+
+##### Fish
+
+Add the following to your `~/.config/fish/config.fish`
+
+```fish
+quicknav init fish | source
 ```
 
 ## Configuring Quicknav
@@ -119,7 +139,10 @@ You can also check out the [example configuration](https://github.com/MrDogeBro/
 
 ### Init Flags
 
-Currently, init flags are not supported but they are planned to be implimented in the future.
+These are flags that you can add to the init command that is used to load your shell profile.
+For more info on loading your shell profile, check out [Adding Quicknav to Your Shell]().
+
+- `-c, --command`: Changes the command which is used to navigate to a shortcut. The default command is `nav`.
 
 ## License
 
