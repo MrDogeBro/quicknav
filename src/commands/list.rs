@@ -1,9 +1,9 @@
-use std::fs::File;
-use std::env::var;
-use std::process::exit;
-use prettytable::{Table};
-use prettytable::format;
 use colored::*;
+use prettytable::format;
+use prettytable::Table;
+use std::env::var;
+use std::fs::File;
+use std::process::exit;
 
 #[derive(Serialize, Deserialize)]
 struct Shortcut {
@@ -15,16 +15,19 @@ struct Shortcut {
 
 #[derive(Serialize, Deserialize)]
 struct Config {
-    shortcuts: Vec<Shortcut>
+    shortcuts: Vec<Shortcut>,
 }
 
 pub fn list(shortcut: Option<String>) {
     if let Some(call) = shortcut {
-        let config_folder = var("XDG_CONFIG_HOME").or_else(|_| var("HOME").map(|home|format!("{}/.config", home))).unwrap();
+        let config_folder = var("XDG_CONFIG_HOME")
+            .or_else(|_| var("HOME").map(|home| format!("{}/.config", home)))
+            .unwrap();
         let config_path = format!("{}/quicknav/quicknav.json", config_folder);
 
         let data = File::open(config_path).expect("Error: Unable to open config file.");
-        let config: Config = serde_json::from_reader(data).expect("Error: Unable to read config file.");
+        let config: Config =
+            serde_json::from_reader(data).expect("Error: Unable to read config file.");
 
         let mut shortcut_list = Table::new();
         shortcut_list.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);
@@ -39,14 +42,21 @@ pub fn list(shortcut: Option<String>) {
             }
         }
 
-        println!("{} {}", "Error: Could not find shortcut with a call of".red(), call.red());
+        println!(
+            "{} {}",
+            "Error: Could not find shortcut with a call of".red(),
+            call.red()
+        );
         exit(1)
     } else {
-        let config_folder = var("XDG_CONFIG_HOME").or_else(|_| var("HOME").map(|home|format!("{}/.config", home))).unwrap();
+        let config_folder = var("XDG_CONFIG_HOME")
+            .or_else(|_| var("HOME").map(|home| format!("{}/.config", home)))
+            .unwrap();
         let config_path = format!("{}/quicknav/quicknav.json", config_folder);
 
         let data = File::open(config_path).expect("Error: Unable to open config file.");
-        let config: Config = serde_json::from_reader(data).expect("Error: Unable to read config file.");
+        let config: Config =
+            serde_json::from_reader(data).expect("Error: Unable to read config file.");
 
         let mut shortcut_list = Table::new();
         shortcut_list.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);

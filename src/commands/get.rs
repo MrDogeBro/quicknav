@@ -1,9 +1,9 @@
+use colored::*;
+use std::env::var;
 use std::fs;
 use std::fs::File;
-use std::env::var;
 use std::path::Path;
 use std::process::exit;
-use colored::*;
 
 #[derive(Serialize, Deserialize)]
 struct Shortcut {
@@ -15,20 +15,28 @@ struct Shortcut {
 
 #[derive(Serialize, Deserialize)]
 struct Config {
-    shortcuts: Vec<Shortcut>
+    shortcuts: Vec<Shortcut>,
 }
 
 fn generate_config() {
-    let config_folder = var("XDG_CONFIG_HOME").or_else(|_| var("HOME").map(|home|format!("{}/.config", home))).unwrap();
+    let config_folder = var("XDG_CONFIG_HOME")
+        .or_else(|_| var("HOME").map(|home| format!("{}/.config", home)))
+        .unwrap();
     let config_path = format!("{}/quicknav", config_folder);
     fs::create_dir(&config_path).expect("Error: Unable to generate config directory.");
-    fs::write(format!("{}/quicknav.json", &config_path), r#"{
+    fs::write(
+        format!("{}/quicknav.json", &config_path),
+        r#"{
     "shortcuts": []
-}"#).expect("Error: Unable to generate config.");
+}"#,
+    )
+    .expect("Error: Unable to generate config.");
 }
 
 pub fn get(location: String) {
-    let config_folder = var("XDG_CONFIG_HOME").or_else(|_| var("HOME").map(|home|format!("{}/.config", home))).unwrap();
+    let config_folder = var("XDG_CONFIG_HOME")
+        .or_else(|_| var("HOME").map(|home| format!("{}/.config", home)))
+        .unwrap();
     let config_path = format!("{}/quicknav/quicknav.json", config_folder);
 
     if !Path::new(&config_path).exists() {
@@ -45,6 +53,9 @@ pub fn get(location: String) {
         }
     }
 
-    println!("{}", "Error: Navigation shortcut not found. Use quicknav list to view all your shortcuts.".red());
+    println!(
+        "{}",
+        "Error: Navigation shortcut not found. Use quicknav list to view all your shortcuts.".red()
+    );
     exit(1)
 }
