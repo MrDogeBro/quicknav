@@ -6,6 +6,7 @@ extern crate serde_derive;
 extern crate prettytable;
 
 mod commands;
+mod config;
 
 use structopt::clap::Shell;
 use structopt::StructOpt;
