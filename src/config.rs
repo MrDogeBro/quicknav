@@ -51,3 +51,13 @@ pub fn load_config() -> Config {
     let config: Config = serde_json::from_reader(data).expect("Error: Unable to read config file.");
     config
 }
+
+pub fn update_config(config: Config) {
+    let config_folder = var("XDG_CONFIG_HOME")
+        .or_else(|_| var("HOME").map(|home| format!("{}/.config", home)))
+        .unwrap();
+    let config_path = format!("{}/quicknav/quicknav.json", config_folder);
+
+    fs::write(config_path, serde_json::to_string_pretty(&config).unwrap())
+        .expect("Error: Failed to write config to file.");
+}
