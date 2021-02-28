@@ -1,7 +1,9 @@
+use colored::*;
 use std::env::var;
 use std::fs;
 use std::fs::File;
 use std::path::Path;
+use std::process::exit;
 
 #[derive(Serialize, Deserialize)]
 pub struct Shortcut {
@@ -48,7 +50,19 @@ pub fn load_config() -> Config {
     }
 
     let data = File::open(config_path).expect("Error: Unable to open config file.");
-    let config: Config = serde_json::from_reader(data).expect("Error: Unable to read config file.");
+    let raw_config = serde_json::from_reader(data);
+
+    if let Err(e) = raw_config {
+        println!(
+            "{} {}.",
+            "Error: Unable to parse config file. Please make sure that all feilds are present. Traceback:"
+                .red(),
+                e.to_string().red()
+        );
+        exit(1);
+    }
+
+    let config: Config = raw_config.expect("Error: Unable to parse config file.");
     config
 }
 
