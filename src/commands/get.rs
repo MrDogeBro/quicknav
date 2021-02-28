@@ -1,6 +1,5 @@
 use colored::*;
 use std::env::var;
-use std::fs;
 use std::process::exit;
 
 use crate::config;
