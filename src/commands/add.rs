@@ -1,51 +1,11 @@
 use colored::*;
 use std::env;
-use std::fs;
-use std::fs::File;
-use std::path::Path;
 use std::process::exit;
 
-#[derive(Serialize, Deserialize)]
-struct Shortcut {
-    name: String,
-    description: String,
-    location: String,
-    calls: Vec<String>,
-}
-
-#[derive(Serialize, Deserialize)]
-struct Config {
-    shortcuts: Vec<Shortcut>,
-}
-
-fn generate_config() {
-    let config_folder = env::var("XDG_CONFIG_HOME")
-        .or_else(|_| env::var("HOME").map(|home| format!("{}/.config", home)))
-        .unwrap();
-    let config_path = format!("{}/quicknav", config_folder);
-    fs::create_dir(&config_path).expect("Error: Unable to generate config directory.");
-    fs::write(
-        format!("{}/quicknav.json", &config_path),
-        r#"{
-    "shortcuts": []
-}"#,
-    )
-    .expect("Error: Unable to generate config.");
-}
+use crate::config;
 
 pub fn add(shortcut: String, location: String, name: Option<String>, description: Option<String>) {
-    let config_folder = env::var("XDG_CONFIG_HOME")
-        .or_else(|_| env::var("HOME").map(|home| format!("{}/.config", home)))
-        .unwrap();
-    let config_path = format!("{}/quicknav/quicknav.json", config_folder);
-
-    if !Path::new(&config_path).exists() {
-        generate_config();
-    }
-
-    let data = File::open(&config_path).expect("Error: Unable to open config file.");
-    let mut config: Config =
-        serde_json::from_reader(data).expect("Error: Unable to read config file.");
+    let mut config: config::Config = config::load_config();
 
     for shortcut_conf in &mut config.shortcuts {
         if shortcut_conf.calls.iter().any(|c| c == &shortcut) {
@@ -76,7 +36,7 @@ pub fn add(shortcut: String, location: String, name: Option<String>, description
         shortcut_location = format!("{}/{}", cwd, location);
     }
 
-    let new_shortcut = Shortcut {
+    let new_shortcut = config::Shortcut {
         name: shortcut_name,
         description: shortcut_description,
         location: shortcut_location,
@@ -84,8 +44,7 @@ pub fn add(shortcut: String, location: String, name: Option<String>, description
     };
 
     config.shortcuts.push(new_shortcut);
-    fs::write(config_path, serde_json::to_string_pretty(&config).unwrap())
-        .expect("Error: Failed to write config to file.");
+    config::update_config(config);
     println!("{} {}", "New shortcut added:".green(), &shortcut);
     exit(0)
 }
