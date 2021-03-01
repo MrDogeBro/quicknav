@@ -29,7 +29,11 @@ fn generate_config() {
         .or_else(|_| var("HOME").map(|home| format!("{}/.config", home)))
         .unwrap();
     let config_path = format!("{}/quicknav", config_folder);
-    fs::create_dir(&config_path).expect("Error: Unable to generate config directory.");
+
+    if !Path::new(&config_path).exists() {
+        fs::create_dir(&config_path).expect("Error: Unable to generate config directory.");
+    }
+
     fs::write(
         format!("{}/quicknav.json", &config_path),
         r#"{
