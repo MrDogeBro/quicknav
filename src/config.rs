@@ -33,7 +33,10 @@ fn generate_config() {
     fs::write(
         format!("{}/quicknav.json", &config_path),
         r#"{
-    "shortcuts": []
+    "shortcuts": [],
+    "options": {
+        "create_missing_directories": false
+    }
 }"#,
     )
     .expect("Error: Unable to generate config.");
