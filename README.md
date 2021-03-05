@@ -20,9 +20,6 @@ A way to quickly navigate your filesystem from the command line.
 Quicknav is a command line tool that allows you to easily jump to specific locations in your filesystem
 from a simple command. Quicknav is built for terminal navigation on Unix operating systems.
 
-The tool is considered to be a **beta** level of readiness; its not completely done and it has not
-been heavily tested for bugs, but it is still ready to be used in a variety of workflows.
-
 ## Why Quicknav
 
 Quicknav allows you to easily set shortcuts to locations in your filesystem. It is made to speed up
@@ -41,16 +38,17 @@ nav js     # go to javascript projects folder
 
 ### Installing Quicknav
 
-Currently, you can only download quicknav via cargo or by downloading the binary and adding it to your path.
-Support for other package managers such as Homebrew, the AUR, etc. is planned.
+You can install quicknav via one of the supported package managers or by downloading the binary and
+adding it to your path. Prebuilt binaries can be downloaded from the [GitHub releases page](https://github.com/MrDogeBro/quicknav/releases).
 
-Prebuilt binaries can be downloaded from the [GitHub releases page](https://github.com/MrDogeBro/quicknav/releases).
+In the future, support for more package managers will continue to grow.
 
-Installing with cargo:
-
-```sh
-$ cargo install quicknav
-```
+| Distribution         | Package Manager | Command                                                |
+| -------------------- | --------------- | ------------------------------------------------------ |
+| Arch                 | Paru            | `paru -S quicknav`                                     |
+| Arch                 | Yay             | `yay -S quicknav`                                      |
+| MacOS                | Homebrew        | `brew tap MrDogeBro/quicknav && brew install quicknav` |
+| Any (Snap Installed) | Snap            | `sudo snap install quicknav --classic`                 |
 
 ### Adding Quicknav to Your Shell
 
