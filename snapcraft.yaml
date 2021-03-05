@@ -1,0 +1,14 @@
+name: quicknav
+version: git
+summary: A way to quickly navigation your filesystem from the command line.
+description: |
+  Quicknav is a command line tool that allows you to easily jump to specific locations in your filesystem from a simple command. Quicknav is built for terminal navigation on Unix operating systems.
+base: core18
+confinement: classic
+parts:
+  quicknav:
+    plugin: rust
+    source: .
+apps:
+  quicknav:
+    command: bin/quicknav
