@@ -49,6 +49,7 @@ In the future, support for more package managers will continue to grow.
 | Arch                        | Yay             | `yay -S quicknav`                                      |
 | MacOS                       | Homebrew        | `brew tap MrDogeBro/quicknav && brew install quicknav` |
 | Most Linux (Snap Installed) | Snap            | `sudo snap install quicknav --classic`                 |
+| Any (Rust Installed)        | Cargo           | `cargo install quicknav`                               |
 
 ### Adding Quicknav to Your Shell
 
