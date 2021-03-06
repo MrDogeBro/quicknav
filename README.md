@@ -43,12 +43,12 @@ adding it to your path. Prebuilt binaries can be downloaded from the [GitHub rel
 
 In the future, support for more package managers will continue to grow.
 
-| Distribution         | Package Manager | Command                                                |
-| -------------------- | --------------- | ------------------------------------------------------ |
-| Arch                 | Paru            | `paru -S quicknav`                                     |
-| Arch                 | Yay             | `yay -S quicknav`                                      |
-| MacOS                | Homebrew        | `brew tap MrDogeBro/quicknav && brew install quicknav` |
-| Any (Snap Installed) | Snap            | `sudo snap install quicknav`                           |
+| Distribution                | Package Manager | Command                                                |
+| --------------------------- | --------------- | ------------------------------------------------------ |
+| Arch                        | Paru            | `paru -S quicknav`                                     |
+| Arch                        | Yay             | `yay -S quicknav`                                      |
+| MacOS                       | Homebrew        | `brew tap MrDogeBro/quicknav && brew install quicknav` |
+| Most Linux (Snap Installed) | Snap            | `sudo snap install quicknav --classic`                 |
 
 ### Adding Quicknav to Your Shell
 
