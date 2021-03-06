@@ -1,1 +1,3 @@
-/target
+target/
+scripts/debbuilder/debs/
+quicknav-*-x86_64.tar.gz
