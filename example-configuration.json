@@ -18,5 +18,8 @@
       "location": "~/Documents/Projects/Rust",
       "calls": ["rust", "rs"]
     }
-  ]
+  ],
+  "options": {
+    "create_missing_directories": false
+  }
 }
