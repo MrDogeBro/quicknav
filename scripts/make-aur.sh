@@ -11,11 +11,11 @@ dirpath=""
 
 if [[ "$currdir" == *"main-quicknav" ]]; then
   if [ -d "../aur-quicknav" ]; then
-    dirpath="../aur-quicknav-test"
+    dirpath="../aur-quicknav"
   fi
 elif [[ "$currdir" == *"scripts" ]]; then
   if [ -d "../../aur-quicknav" ]; then
-    dirpath="../../aur-quicknav-test"
+    dirpath="../../aur-quicknav"
   fi
 else
   echo "Script can not be run from current directory"
