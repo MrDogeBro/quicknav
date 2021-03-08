@@ -66,8 +66,8 @@ if [[ "$dirpath" == "."* ]]; then
   sed -i "" "s/^pkgrel=.*/pkgrel=${pkgrel}/" PKGBUILD
   sed -i "" "s/^sha256sums=.*/sha256sums=(\"$sha256\")/" PKGBUILD
 
-  sed -i "" "s/^pkgver = .*/pkgver = ${pkgver}/" .SRCINFO
-  sed -i "" "s/^pkgrel = .*/pkgrel = ${pkgrel}/" .SRCINFO
-  sed -i "" "s/^source = .*/source = quicknav-v${pkgver}.tar.gz::https://github.com/MrDogeBro/quicknav/archive/v${pkgver}.tar.gz/" .SRCINFO
-  sed -i "" "s/^sha256sums = .*/sha256sums = $sha256/" .SRCINFO
+  sed -i "" "s/pkgver = .*/pkgver = ${pkgver}/" .SRCINFO
+  sed -i "" "s/pkgrel = .*/pkgrel = ${pkgrel}/" .SRCINFO
+  sed -i "" "s/source = .*/source = quicknav-v${pkgver}.tar.gz::https:\/\/github.com\/MrDogeBro\/quicknav\/archive\/v${pkgver}.tar.gz/" .SRCINFO
+  sed -i "" "s/sha256sums = .*/sha256sums = $sha256/" .SRCINFO
 fi
