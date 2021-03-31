@@ -9,13 +9,6 @@ parts:
   quicknav:
     plugin: rust
     source: .
-plugs:
-  home-access:
-    interface: personal-files
-    read:
-      - $HOME
 apps:
   quicknav:
     command: bin/quicknav
-    plugs:
-      - home-access
