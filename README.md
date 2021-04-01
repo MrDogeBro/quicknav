@@ -135,6 +135,26 @@ $ nav maybeevenanothercall
 
 You can also check out the [example configuration](https://github.com/MrDogeBro/quicknav/blob/master/example-configuration.json).
 
+### Options
+
+These are the options that quicknav accepts in its config file, not including shortcuts, under the options section.
+These options currently can only be configured by editing the config file but this will change in the future.
+Each option listed will give a description of what it does and then the the following information in a table.
+
+| Config Name                                         | Allowed Value                                               | Default Value                                |
+| --------------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------- |
+| This is the name for the option in the config file. | This is what type of value can be configured for the option | This is what the value is set to by default. |
+
+##### Create Missing Directories
+
+If set to true, quicknav will automatically create the directories in a given path if they do not exist
+when the navigation shortcut to that location is used. This is useful if you are moving your config between
+computers and would like your shortcut locations to automatically be created for you.
+
+| Config Name                | Allowed Value               | Default Value |
+| -------------------------- | --------------------------- | ------------- |
+| create_missing_directories | Boolean (`true` or `false`) | `false`       |
+
 ### Init Flags
 
 These are flags that you can add to the init command that is used to load your shell profile.
