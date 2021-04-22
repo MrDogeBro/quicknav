@@ -23,12 +23,12 @@ if [ -f "/etc/debian_version" ]; then
   echo -e "\n                   Deb Installer"
   echo -e "===================================================${DEF}\n"
 
-  githubRequest=$(curl -s -H "Accept: application/vnd.github.v3+json" \
-    https://api.github.com/repos/MrDogeBro/quicknav/releases/latest)
-  tag=$(echo $githubRequest |
+  tag=$(curl -s -H "Accept: application/vnd.github.v3+json" \
+    https://api.github.com/repos/MrDogeBro/quicknav/releases/latest |
     awk '/tag_name/ { tag = $2 } /tag_name/ {print tag}' |
     cut -d '"' -f2)
-  platformList=($(echo $githubRequest |
+  platformList=($(curl -s -H "Accept: application/vnd.github.v3+json" \
+    https://api.github.com/repos/MrDogeBro/quicknav/releases/latest |
     awk '/name/ { name = $2 } /name/ { print name }' |
     awk '/.deb/' |
     cut -d '"' -f2))
