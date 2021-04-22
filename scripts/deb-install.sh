@@ -10,6 +10,7 @@ BOLD="\033[1m"
 if [ -f "/etc/debian_version" ]; then
   if [ "$(whoami)" != "root" ]; then
     echo -e "${RED}This script must be run as root. Please run the script again with sudo.${DEF}"
+    exit
   fi
 
   echo -e -n "${RED}${BOLD}"
@@ -20,7 +21,7 @@ if [ -f "/etc/debian_version" ]; then
   echo '\___\_\\__,_/ /_/  \___/ /_/|_| /_/ /_/\__,_/ _____/'
 
   echo -e "\n                   Deb Installer"
-  echo -e "===================================================${DEF}"
+  echo -e "===================================================${DEF}\n"
 
   tag=$(curl -s https://api.github.com/repos/MrDogeBro/quicknav/releases/latest |
     awk '/tag_name/ { tag = $2 } /tag_name/ {print tag}' |
@@ -78,7 +79,7 @@ if [ -f "/etc/debian_version" ]; then
 
   echo -e "➤ │ ${BLUE}${BOLD}Info${DEF}: Installing deb file..."
   echo -e "➤ │ ${DIM}$ apt install -y /tmp/quicknav-installer.deb${DEF}"
-  sudo apt install -y /tmp/quicknav-installer.deb
+  sudo apt install -y /tmp/quicknav-installer.deb &> /dev/null
   echo -e "➤ │ ${BLUE}${BOLD}Info${DEF}: Deb file installed"
 
   echo -e "➤ │"
