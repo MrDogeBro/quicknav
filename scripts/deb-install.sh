@@ -8,6 +8,20 @@ DEF="\033[0m"
 BOLD="\033[1m"
 
 if [ -f "/etc/debian_version" ]; then
+  if [ "$(whoami)" != "root" ]; then
+    echo -e "${RED}This script must be run as root. Please run the script again with sudo.${DEF}"
+  fi
+
+  echo -e -n "${RED}${BOLD}"
+  echo '_______       _____      ______'
+  echo '__  __ \___  ____(_)________  /______________ ___   __'
+  echo '_  / / /  / / /_  /_  ___/_  //_/_  __ \  __ `/_ | / /'
+  echo '/ /_/ // /_/ /_  / / /__ _  ,<  _  / / / /_/ /__ |/ /'
+  echo '\___\_\\__,_/ /_/  \___/ /_/|_| /_/ /_/\__,_/ _____/'
+
+  echo -e "\n                   Deb Installer"
+  echo -e "===================================================${DEF}"
+
   tag=$(curl -s https://api.github.com/repos/MrDogeBro/quicknav/releases/latest |
     awk '/tag_name/ { tag = $2 } /tag_name/ {print tag}' |
     cut -d '"' -f2)
