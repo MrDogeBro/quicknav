@@ -72,14 +72,14 @@ if [ -f "/etc/debian_version" ]; then
 
   echo -e "➤ │ ${BLUE}${BOLD}Info${DEF}: Downloading deb file..."
   echo -e "➤ │ ${DIM}$ curl -Ls -o /tmp/quicknav-installer.deb \"https://github.com/MrDogeBro/quicknav/releases/download/${tag}/${platformList[$platformChoice]}\"${DEF}"
+  curl -Ls -o /tmp/quicknav-installer.deb "https://github.com/MrDogeBro/quicknav/releases/download/${tag}/${platformList[$platformChoice]}"
 
   if [ ! -f /tmp/quicknav-installer.deb ]; then
-    echo -e "➤ | ${RED}Error downloading file, please try again."
+    echo -e "➤ | ${RED}Error downloading file, please try again.${DEF}"
     echo -e "➤ └ Installation failed"
     exit
   fi
 
-  curl -Ls -o /tmp/quicknav-installer.deb "https://github.com/MrDogeBro/quicknav/releases/download/${tag}/${platformList[$platformChoice]}"
   echo -e "➤ │ ${BLUE}${BOLD}Info${DEF}: Deb file downloaded"
 
   echo -e "➤ │"
