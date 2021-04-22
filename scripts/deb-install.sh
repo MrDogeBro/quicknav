@@ -56,8 +56,8 @@ if [ -f "/etc/debian_version" ]; then
   echo -e "\n➤ ┌ Installing ${platformList[$platformChoice]}"
 
   echo -e "➤ │ ${BLUE}${BOLD}Info${DEF}: Downloading deb file..."
-  echo -e "➤ │ ${DIM}$ curl -L -o -s /tmp/quicknav-installer.deb \"https://github.com/MrDogeBro/quicknav/releases/download/${tag}/${platformList[$platformChoice]}\"${DEF}"
-  curl -L -o -s /tmp/quicknav-installer.deb "https://github.com/MrDogeBro/quicknav/releases/download/${tag}/${platformList[$platformChoice]}"
+  echo -e "➤ │ ${DIM}$ curl -Ls -o /tmp/quicknav-installer.deb \"https://github.com/MrDogeBro/quicknav/releases/download/${tag}/${platformList[$platformChoice]}\"${DEF}"
+  curl -Ls -o /tmp/quicknav-installer.deb "https://github.com/MrDogeBro/quicknav/releases/download/${tag}/${platformList[$platformChoice]}"
   echo -e "➤ │ ${BLUE}${BOLD}Info${DEF}: Deb file downloaded"
 
   echo -e "➤ │"
