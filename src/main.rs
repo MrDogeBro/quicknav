@@ -90,7 +90,7 @@ fn gen_completions(shell: String) {
     if shell == "bash" {
         shell_profile = Shell::Bash;
     } else if shell == "zsh" {
-        shell_profile = Shell::Bash;
+        shell_profile = Shell::Zsh;
     } else if shell == "fish" {
         shell_profile = Shell::Fish;
     }
