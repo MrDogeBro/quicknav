@@ -102,10 +102,11 @@ fn gen_completions(shell: String) {
         drop(stdout_buf);
 
         println!(
-            "#compdef quicknav \n\n{}",
+            "autoload bashcompinit\nbashcompinit\n\n{}",
             completions.replace(
                 "complete -F _quicknav -o bashdefault -o default quicknav",
-                "_quicknav"
+                "$(autoload | grep -q bashcompinit) && \
+                 complete -F _quicknav -o bashdefault -o default quicknav"
             )
         );
 
