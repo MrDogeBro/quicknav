@@ -55,7 +55,7 @@ In the future, support for more package managers will continue to grow.
 
 ### Adding Quicknav to Your Shell
 
-Adding quicknav to your shell is increadably easy. You just need to add the following line to your shells
+Adding quicknav to your shell is incredibly easy. You just need to add the following line to your shells
 configuration file and replace `shell_name` with the name of your shell. The shells listed below are the only
 shells that are currently supported. Other shells may work but are not guaranteed to. If you would like another
 shell to be supported, please head over to [feedback in the discussions tab](https://github.com/MrDogeBro/quicknav/discussions/categories/feedback).
