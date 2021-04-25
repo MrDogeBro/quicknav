@@ -101,7 +101,13 @@ fn gen_completions(shell: String) {
         stdout_buf.read_to_string(&mut completions).unwrap();
         drop(stdout_buf);
 
-        println!("{}", completions);
+        println!(
+            "#compdef quicknav \n\n{}",
+            completions.replace(
+                "complete -F _quicknav -o bashdefault -o default quicknav",
+                "_quicknav"
+            )
+        );
 
         return;
     } else if shell == "fish" {
