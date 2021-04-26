@@ -8,6 +8,8 @@ extern crate prettytable;
 mod commands;
 mod config;
 
+use gag::BufferRedirect;
+use std::io::Read;
 use structopt::clap::Shell;
 use structopt::StructOpt;
 
@@ -91,6 +93,24 @@ fn gen_completions(shell: String) {
         shell_profile = Shell::Bash;
     } else if shell == "zsh" {
         shell_profile = Shell::Bash;
+
+        let mut stdout_buf = BufferRedirect::stdout().unwrap();
+        Quicknav::clap().gen_completions_to("quicknav", shell_profile, &mut std::io::stdout());
+
+        let mut completions = String::new();
+        stdout_buf.read_to_string(&mut completions).unwrap();
+        drop(stdout_buf);
+
+        println!(
+            "autoload bashcompinit\nbashcompinit\n\n{}",
+            completions.replace(
+                "complete -F _quicknav -o bashdefault -o default quicknav",
+                "$(autoload | grep -q bashcompinit) && \
+                 complete -F _quicknav -o bashdefault -o default quicknav"
+            )
+        );
+
+        return;
     } else if shell == "fish" {
         shell_profile = Shell::Fish;
     }
