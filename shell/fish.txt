@@ -6,16 +6,42 @@ function __quicknav_nav
   if test (count $argv) -eq 0
     quicknav --help
     return 0
-  else
-    set -l __quicknav_result (quicknav get $argv)
+  end
 
-    if test $status -eq 0
-      __quicknav_cd $__quicknav_result
-      return 0
-    else
-      echo -e "\033[0;31m$__quicknav_result"
+  switch "$argv"
+    case "-*"
+      if [ "$argv" = "--help" ] ||  [ "$argv" = "-h" ]
+        set -l __quicknav_version (string split " " (quicknav -V))[2]
+
+        echo -e "nav (quicknav helper) $__quicknav_version\n"
+        echo -e "USAGE:\n    nav <shortcut>\n"
+        echo -e "FLAGS:\n    -h, --help      Prints help information\n    -V, --version   Prints version information\n"
+        echo -e "DESCRIPTION:\n    This is the quicknav helper. It is responsible for handling the actual navigation part."
+        echo -e "    For more commands (not just the jumping around), check out the quicknav command for more options."
+        return 0
+      end
+
+      if [ "$argv" = "--version" ] ||  [ "$argv" = "-V" ]
+        set -l __quicknav_version (string split " " (quicknav -V))[2]
+
+        echo -e "nav (quicknav helper) $__quicknav_version"
+        return 0
+      end
+
+      echo -e "\033[0;31merror:\033[0m Found argument '\033[0;33m$argv\033[0m' which is not valid.\n"
+      echo -e "USAGE:\n    nav <shortcut>\n"
+      echo -e "For more information try \033[0;32m--help\033[0m"
       return 1
-    end
+  end
+
+  set -l __quicknav_result (quicknav get $argv)
+
+  if test $status -eq 0
+    __quicknav_cd $__quicknav_result
+    return 0
+  else
+    echo -e "\033[0;31m$__quicknav_result"
+    return 1
   end
 end
 
