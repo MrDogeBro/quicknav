@@ -6,6 +6,31 @@ function __quicknav_nav() {
   if [ "$#" -eq 0 ]; then
     quicknav --help
     return 0
+  elif [[ "$1" == "-"* ]]; then
+    if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
+      local __quicknav_version
+      local __quicknav_version_raw
+      __quicknav_version_raw=($(quicknav -V))
+      __quicknav_version=${__quicknav_version_raw[2]}
+
+      echo "nav (quicknav helper) $__quicknav_version\n"
+      echo "USAGE:\n    nav <shortcut>\n"
+      echo "FLAGS:\n    -h, --help      Prints help information\n    -V, --version   Prints version information\n"
+      echo "DESCRIPTION:\n    This is the quicknav helper. It is responsible for handling the actual navigation part."
+      echo "    For more commands (not just the jumping around), check out the quicknav command for more options."
+      return 0
+    elif [[ "$1" == "--version" ]] || [[ "$1" == "-V" ]]; then
+      local __quicknav_version
+      local __quicknav_version_raw
+      __quicknav_version_raw=($(quicknav -V))
+      __quicknav_version=${__quicknav_version_raw[2]}
+
+      echo "nav (quicknav helper) $__quicknav_version"
+    else
+      echo "\033[0;31merror:\033[0m Found argument '\033[0;33m$1\033[0m' which is not valid.\n"
+      echo "USAGE:\n    nav <shortcut>\n"
+      echo "For more information try \033[0;32m--help\033[0m"
+    fi
   else
     local __quicknav_result
     __quicknav_result="$(quicknav get "$@")"
