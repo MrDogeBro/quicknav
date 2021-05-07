@@ -26,10 +26,12 @@ function __quicknav_nav() {
       __quicknav_version=${__quicknav_version_raw[2]}
 
       echo "nav (quicknav helper) $__quicknav_version"
+      return 0
     else
       echo "\033[0;31merror:\033[0m Found argument '\033[0;33m$1\033[0m' which is not valid.\n"
       echo "USAGE:\n    nav <shortcut>\n"
       echo "For more information try \033[0;32m--help\033[0m"
+      return 1
     fi
   else
     local __quicknav_result
