@@ -45,13 +45,13 @@ adding it to your path. Prebuilt binaries can be downloaded from the [GitHub rel
 
 In the future, support for more package managers will continue to grow.
 
-| Distribution             | Package Manager | Command                                                                                                                |
-| ------------------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Arch                     | Paru            | `paru -S quicknav`                                                                                                     |
-| Arch                     | Yay             | `yay -S quicknav`                                                                                                      |
-| MacOS                    | Homebrew        | `brew tap MrDogeBro/quicknav && brew install quicknav`                                                                 |
-| Debian (or Debian Based) | Install Script  | `sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/MrDogeBro/quicknav/HEAD/scripts/deb-installer.sh)"` |
-| Any (Rust Installed)     | Cargo           | `cargo install quicknav`                                                                                               |
+| Distribution             | Package Manager | Command                                                                                                              |
+| ------------------------ | --------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Arch                     | Paru            | `paru -S quicknav`                                                                                                   |
+| Arch                     | Yay             | `yay -S quicknav`                                                                                                    |
+| MacOS                    | Homebrew        | `brew tap MrDogeBro/quicknav && brew install quicknav`                                                               |
+| Debian (or Debian Based) | Install Script  | `sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/MrDogeBro/quicknav/HEAD/scripts/deb-install.sh)"` |
+| Any (Rust Installed)     | Cargo           | `cargo install quicknav`                                                                                             |
 
 ### Adding Quicknav to Your Shell
 
