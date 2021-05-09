@@ -31,6 +31,12 @@ pub enum Quicknav {
         /// The shortcut to remove (by call)
         shortcut: String,
     },
+    /// Allows for command line configuration of
+    /// options
+    Config {
+        /// The option to change'
+        option: String,
+    },
     /// Initalizes the shell profile
     Init {
         /// The shell profile to use
