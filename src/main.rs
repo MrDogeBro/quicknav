@@ -7,8 +7,11 @@ extern crate prettytable;
 
 mod commands;
 mod config;
+mod quicknav;
 
 use anyhow::Result;
+use quicknav::Quicknav;
+use structopt::StructOpt;
 
 fn main() -> Result<()> {
     match run() {
