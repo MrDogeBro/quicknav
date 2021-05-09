@@ -1,13 +1,13 @@
+use anyhow::Result;
 use colored::*;
 use std::env::var;
 use std::fs::create_dir_all;
 use std::path::Path;
-use std::process::exit;
 
 use crate::config;
 
-pub fn get(location: String) {
-    let config: config::Config = config::load_config();
+pub fn get(location: String) -> Result<i32> {
+    let config: config::Config = config::load_config()?;
 
     for shortcut in config.shortcuts {
         if shortcut.calls.iter().any(|c| c == &location) {
@@ -15,7 +15,7 @@ pub fn get(location: String) {
 
             if Path::new(&shortcut_location).exists() {
                 println!("{}", shortcut.location.replace("~", &var("HOME").unwrap()));
-                exit(0);
+                return Ok(0);
             }
 
             if !config.options.create_missing_directories {
@@ -25,21 +25,13 @@ pub fn get(location: String) {
                     &shortcut_location.red(),
                     ". If you would like quicknav to automatically create missing directories for you, enable the option create_missing_directories in your config file.".red()
                 );
-                exit(1);
+                return Ok(1);
             }
 
-            if let Err(e) = create_dir_all(&shortcut_location) {
-                println!(
-                    "{} {}. Traceback: {}",
-                    "Error: Could not create directories for path".red(),
-                    &shortcut_location.red(),
-                    e.to_string().red()
-                );
-                exit(1);
-            }
+            create_dir_all(&shortcut_location)?;
 
             println!("{}", shortcut.location.replace("~", &var("HOME").unwrap()));
-            exit(0);
+            return Ok(0);
         }
     }
 
@@ -47,5 +39,5 @@ pub fn get(location: String) {
         "{}",
         "Error: Navigation shortcut not found. Use quicknav list to view all your shortcuts.".red()
     );
-    exit(1)
+    Ok(1)
 }

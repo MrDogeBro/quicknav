@@ -1,28 +1,30 @@
-fn get_profile(profile: &str, command: &str) -> String {
+use anyhow::Result;
+
+fn get_profile(profile: &str, command: &str) -> Result<String> {
     if profile == "default" {
         let shell_profile = include_str!("../../shell/default.txt");
 
         if command.len() > 0 {
             let new_command = format!("function {}", command);
-            return shell_profile.replace("function nav", &new_command);
+            return Ok(shell_profile.replace("function nav", &new_command));
         }
 
-        return shell_profile.to_string();
+        return Ok(shell_profile.to_string());
     } else if profile == "fish" {
         let shell_profile = include_str!("../../shell/fish.txt");
 
         if command.len() > 0 {
             let new_command = format!("function {}", command);
-            return shell_profile.replace("function nav", &new_command);
+            return Ok(shell_profile.replace("function nav", &new_command));
         }
 
-        return shell_profile.to_string();
+        return Ok(shell_profile.to_string());
     }
 
-    return "".to_string();
+    Ok("".to_string())
 }
 
-pub fn init(shell: String, command: Option<String>) {
+pub fn init(shell: String, command: Option<String>) -> Result<i32> {
     let mut profile: &str = "default";
 
     if shell == "bash" || shell == "zsh" {
@@ -32,8 +34,10 @@ pub fn init(shell: String, command: Option<String>) {
     }
 
     if let Some(cmd) = command {
-        println!("{}", get_profile(profile, &cmd));
+        println!("{}", get_profile(profile, &cmd)?);
     } else {
-        println!("{}", get_profile(profile, ""));
+        println!("{}", get_profile(profile, "")?);
     }
+
+    Ok(0)
 }

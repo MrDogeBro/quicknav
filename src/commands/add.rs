@@ -1,11 +1,16 @@
+use anyhow::Result;
 use colored::*;
 use std::env;
-use std::process::exit;
 
 use crate::config;
 
-pub fn add(shortcut: String, location: String, name: Option<String>, description: Option<String>) {
-    let mut config: config::Config = config::load_config();
+pub fn add(
+    shortcut: String,
+    location: String,
+    name: Option<String>,
+    description: Option<String>,
+) -> Result<i32> {
+    let mut config: config::Config = config::load_config()?;
 
     for shortcut_conf in &mut config.shortcuts {
         if shortcut_conf.calls.iter().any(|c| c == &shortcut) {
@@ -15,7 +20,7 @@ pub fn add(shortcut: String, location: String, name: Option<String>, description
                 &shortcut.red(),
                 "already exists.".red()
             );
-            exit(1)
+            return Ok(1);
         }
     }
 
@@ -27,9 +32,11 @@ pub fn add(shortcut: String, location: String, name: Option<String>, description
     if let Some(name) = name {
         shortcut_name = name;
     }
+
     if let Some(description) = description {
         shortcut_description = description;
     }
+
     if location == "." {
         shortcut_location = cwd;
     } else if !location.starts_with(&env::var("HOME").unwrap()) {
@@ -44,7 +51,8 @@ pub fn add(shortcut: String, location: String, name: Option<String>, description
     };
 
     config.shortcuts.push(new_shortcut);
-    config::update_config(config);
+    config::update_config(config)?;
     println!("{} {}", "New shortcut added:".green(), &shortcut);
-    exit(0)
+
+    Ok(0)
 }

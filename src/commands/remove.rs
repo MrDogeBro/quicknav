@@ -1,10 +1,10 @@
+use anyhow::Result;
 use colored::*;
-use std::process::exit;
 
 use crate::config;
 
-pub fn remove(shortcut: String) {
-    let mut config: config::Config = config::load_config();
+pub fn remove(shortcut: String) -> Result<i32> {
+    let mut config: config::Config = config::load_config()?;
     let mut found_shortcut = false;
     let mut index_to_remove: usize = 0;
 
@@ -22,11 +22,12 @@ pub fn remove(shortcut: String) {
             shortcut.red(),
             "was not found.".red()
         );
-        exit(1);
+        return Ok(1);
     }
 
     config.shortcuts.remove(index_to_remove);
-    config::update_config(config);
+    config::update_config(config)?;
     println!("{} {}", "Shortcut removed:".green(), &shortcut);
-    exit(0)
+
+    Ok(0)
 }

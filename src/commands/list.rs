@@ -1,13 +1,13 @@
+use anyhow::Result;
 use colored::*;
 use prettytable::format;
 use prettytable::Table;
-use std::process::exit;
 
 use crate::config;
 
-pub fn list(shortcut: Option<String>) {
+pub fn list(shortcut: Option<String>) -> Result<i32> {
     if let Some(call) = shortcut {
-        let config: config::Config = config::load_config();
+        let config: config::Config = config::load_config()?;
 
         let mut shortcut_list = Table::new();
         shortcut_list.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);
@@ -18,7 +18,7 @@ pub fn list(shortcut: Option<String>) {
                 let calls: String = shortcut_conf.calls.join(", ");
                 shortcut_list.add_row(row![calls, shortcut_conf.name, shortcut_conf.location]);
                 shortcut_list.printstd();
-                exit(0)
+                return Ok(0);
             }
         }
 
@@ -27,9 +27,9 @@ pub fn list(shortcut: Option<String>) {
             "Error: Could not find shortcut with a call of".red(),
             call.red()
         );
-        exit(1)
+        Ok(1)
     } else {
-        let config: config::Config = config::load_config();
+        let config: config::Config = config::load_config()?;
 
         let mut shortcut_list = Table::new();
         shortcut_list.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);
@@ -41,6 +41,6 @@ pub fn list(shortcut: Option<String>) {
         }
 
         shortcut_list.printstd();
-        exit(0)
+        Ok(0)
     }
 }
