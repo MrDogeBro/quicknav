@@ -1,7 +1,6 @@
 use anyhow::Result;
 use colored::*;
-use prettytable::format;
-use prettytable::Table;
+use prettytable::{format, Table};
 
 use crate::config;
 
