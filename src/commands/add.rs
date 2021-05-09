@@ -10,7 +10,7 @@ pub fn add(
     name: Option<String>,
     description: Option<String>,
 ) -> Result<i32> {
-    let mut config: config::Config = config::load_config()?;
+    let mut config: config::Config = config::Config::load()?;
 
     for shortcut_conf in &mut config.shortcuts {
         if shortcut_conf.calls.iter().any(|c| c == &shortcut) {
@@ -51,7 +51,7 @@ pub fn add(
     };
 
     config.shortcuts.push(new_shortcut);
-    config::update_config(config)?;
+    config.update()?;
     println!("{} {}", "New shortcut added:".green(), &shortcut);
 
     Ok(0)

@@ -7,7 +7,7 @@ use std::path::Path;
 use crate::config;
 
 pub fn get(location: String) -> Result<i32> {
-    let config: config::Config = config::load_config()?;
+    let config: config::Config = config::Config::load()?;
 
     for shortcut in config.shortcuts {
         if shortcut.calls.iter().any(|c| c == &location) {

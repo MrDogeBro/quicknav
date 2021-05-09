@@ -7,7 +7,7 @@ use crate::config;
 
 pub fn list(shortcut: Option<String>) -> Result<i32> {
     if let Some(call) = shortcut {
-        let config: config::Config = config::load_config()?;
+        let config: config::Config = config::Config::load()?;
 
         let mut shortcut_list = Table::new();
         shortcut_list.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);
@@ -29,7 +29,7 @@ pub fn list(shortcut: Option<String>) -> Result<i32> {
         );
         Ok(1)
     } else {
-        let config: config::Config = config::load_config()?;
+        let config: config::Config = config::Config::load()?;
 
         let mut shortcut_list = Table::new();
         shortcut_list.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);
