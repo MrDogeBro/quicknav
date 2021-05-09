@@ -31,6 +31,7 @@ fn run() -> Result<i32> {
             description,
         } => return commands::add(shortcut, location, name, description),
         Quicknav::Remove { shortcut } => return commands::remove(shortcut),
+        Quicknav::Config { option } => return commands::config(option),
         Quicknav::Init { shell, command } => return commands::init(shell, command),
     }
 }
