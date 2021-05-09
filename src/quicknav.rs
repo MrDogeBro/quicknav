@@ -29,13 +29,13 @@ pub enum Quicknav {
     /// Removes a shortcut
     Remove {
         /// The shortcut to remove (by call)
-        shortcut: Option<String>,
+        shortcut: String,
     },
     /// Allows for command line configuration of
     /// options
     Config {
         /// The option to change'
-        option: String,
+        option: Option<String>,
     },
     /// Initalizes the shell profile
     Init {
