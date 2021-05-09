@@ -8,6 +8,7 @@ extern crate prettytable;
 mod commands;
 mod config;
 
+use anyhow::Result;
 use gag::BufferRedirect;
 use std::io::Read;
 use structopt::clap::Shell;
@@ -54,39 +55,40 @@ enum Quicknav {
     },
 }
 
-fn main() {
-    // handle command dispatching
+fn main() -> Result<()> {
+    match run() {
+        Ok(res) => std::process::exit(res),
+        Err(e) => return Err(e),
+    }
+}
+
+fn run() -> Result<i32> {
     match Quicknav::from_args() {
-        Quicknav::Get { location } => {
-            commands::get(location);
-        }
-        Quicknav::List { shortcut } => {
-            commands::list(shortcut);
-        }
+        Quicknav::Get { location } => return commands::get(location),
+        Quicknav::List { shortcut } => return commands::list(shortcut),
         Quicknav::Add {
             shortcut,
             location,
             name,
             description,
-        } => {
-            commands::add(shortcut, location, name, description);
-        }
-        Quicknav::Remove { shortcut } => commands::remove(shortcut),
+        } => return commands::add(shortcut, location, name, description),
+        Quicknav::Remove { shortcut } => return commands::remove(shortcut),
         Quicknav::Init { shell, command } => {
             let supported_shells = vec!["bash", "zsh", "fish"];
             if supported_shells.iter().any(|&s| s == shell) {
-                commands::init(shell.to_owned(), command);
-                gen_completions(shell);
+                gen_completions(shell.to_owned())?;
+                return commands::init(shell, command);
             } else {
                 println!(
                     "echo -e \"\\033[0;31mError: Failed to load shell profile. Invalid or unsupported shell provided.\""
                 );
+                Ok(1)
             }
         }
     }
 }
 
-fn gen_completions(shell: String) {
+fn gen_completions(shell: String) -> Result<i32> {
     let mut shell_profile = Shell::Bash;
 
     if shell == "bash" {
@@ -110,10 +112,12 @@ fn gen_completions(shell: String) {
             )
         );
 
-        return;
+        return Ok(0);
     } else if shell == "fish" {
         shell_profile = Shell::Fish;
     }
 
     Quicknav::clap().gen_completions_to("quicknav", shell_profile, &mut std::io::stdout());
+
+    Ok(0)
 }
