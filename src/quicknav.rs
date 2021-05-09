@@ -29,7 +29,7 @@ pub enum Quicknav {
     /// Removes a shortcut
     Remove {
         /// The shortcut to remove (by call)
-        shortcut: String,
+        shortcut: Option<String>,
     },
     /// Allows for command line configuration of
     /// options
