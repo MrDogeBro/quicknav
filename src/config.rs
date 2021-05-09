@@ -14,13 +14,13 @@ pub struct Shortcut {
 
 #[derive(Serialize, Deserialize)]
 pub struct Options {
-    pub create_missing_directories: bool,
+    pub create_missing_directories: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Config {
     pub shortcuts: Vec<Shortcut>,
-    pub options: Options,
+    pub options: Option<Options>,
 }
 
 fn generate_config() -> Result<i32> {
