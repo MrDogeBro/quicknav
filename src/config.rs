@@ -69,7 +69,6 @@ impl Config {
 
         let data = File::open(config_path)?;
         let config: Config = serde_json::from_reader(data)?;
-        println!("{:?}", config);
 
         Ok(config)
     }
