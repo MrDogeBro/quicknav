@@ -14,10 +14,13 @@ use anyhow::Result;
 use quicknav::Quicknav;
 use structopt::StructOpt;
 
-fn main() -> Result<()> {
+fn main() {
     match run() {
         Ok(res) => std::process::exit(res),
-        Err(e) => return Err(e),
+        Err(e) => {
+            println!("{}", e);
+            std::process::exit(1)
+        }
     }
 }
 
