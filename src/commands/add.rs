@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use colored::*;
 use std::env;
 
@@ -14,13 +14,10 @@ pub fn add(
 
     for shortcut_conf in &mut config.shortcuts {
         if shortcut_conf.calls.iter().any(|c| c == &shortcut) {
-            println!(
-                "{} {} {}",
-                "Error: Shortcut with call".red(),
-                &shortcut.red(),
-                "already exists.".red()
-            );
-            return Ok(1);
+            return Err(anyhow!(format!(
+                "Shortcut with call {} already exists.",
+                &shortcut
+            )));
         }
     }
 

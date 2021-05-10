@@ -1,5 +1,4 @@
-use anyhow::Result;
-use colored::*;
+use anyhow::{anyhow, Result};
 use std::env::var;
 use std::fs::create_dir_all;
 use std::path::Path;
@@ -19,13 +18,10 @@ pub fn get(location: String) -> Result<i32> {
             }
 
             if !config.options.create_missing_directories {
-                println!(
-                    "{} {}{}",
-                    "Error: Shortcut location does not exist".red(),
-                    &shortcut_location.red(),
-                    ". If you would like quicknav to automatically create missing directories for you, enable the option create_missing_directories in your config file.".red()
-                );
-                return Ok(1);
+                return Err(anyhow!(format!(
+                    "Shortcut location does not exist {}. If you would like quicknav to automatically create missing directories for you, enable the option create_missing_directories in your config file.",
+                    &shortcut_location,
+                )));
             }
 
             create_dir_all(&shortcut_location)?;
@@ -35,9 +31,7 @@ pub fn get(location: String) -> Result<i32> {
         }
     }
 
-    println!(
-        "{}",
-        "Error: Navigation shortcut not found. Use quicknav list to view all your shortcuts.".red()
-    );
-    Ok(1)
+    Err(anyhow!(format!(
+        "Navigation shortcut not found. Use quicknav list to view all your shortcuts."
+    )))
 }

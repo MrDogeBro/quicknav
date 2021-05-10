@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use colored::*;
 use prettytable::{format, Table};
 
@@ -21,10 +21,7 @@ pub fn config(option: Option<String>, new_value: Option<String>) -> Result<i32> 
                     config.options.create_missing_directories = string::to_bool(&new_value)?;
                     value = "create_missing_directories";
                 }
-                _ => {
-                    println!("{}", "Error: Option not found or is not valid. Use quicknav config to view available options.".red());
-                    return Ok(1);
-                }
+                _ => return Err(anyhow!(format!("Option not found or is not valid. Use quicknav config to view available options.")))
             }
 
             println!(
@@ -46,8 +43,7 @@ pub fn config(option: Option<String>, new_value: Option<String>) -> Result<i32> 
                 ]);
             }
             _ => {
-                println!("{}", "Error: Option not found or is not valid. Use quicknav config to view available options.".red());
-                return Ok(1);
+                return Err(anyhow!(format!("Option not found or is not valid. Use quicknav config to view available options.")));
             }
         }
 

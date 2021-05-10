@@ -1,5 +1,4 @@
-use anyhow::Result;
-use colored::*;
+use anyhow::{anyhow, Result};
 use prettytable::{format, Table};
 
 use crate::config;
@@ -21,12 +20,10 @@ pub fn list(shortcut: Option<String>) -> Result<i32> {
             }
         }
 
-        println!(
-            "{} {}",
-            "Error: Could not find shortcut with a call of".red(),
-            call.red()
-        );
-        Ok(1)
+        Err(anyhow!(format!(
+            "Could not find shortcut with a call of {}.",
+            call
+        )))
     } else {
         let config: config::Config = config::Config::load()?;
 

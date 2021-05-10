@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use colored::*;
 
 use crate::config;
@@ -16,13 +16,10 @@ pub fn remove(shortcut: String) -> Result<i32> {
     }
 
     if !found_shortcut {
-        println!(
-            "{} {} {}",
-            "Error: Shortcut with call".red(),
-            shortcut.red(),
-            "was not found.".red()
-        );
-        return Ok(1);
+        return Err(anyhow!(format!(
+            "Shortcut with call {} was not found.",
+            shortcut,
+        )));
     }
 
     config.shortcuts.remove(index_to_remove);
