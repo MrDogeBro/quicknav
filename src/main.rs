@@ -11,6 +11,7 @@ mod quicknav;
 mod utils;
 
 use anyhow::Result;
+use colored::*;
 use quicknav::Quicknav;
 use structopt::StructOpt;
 
@@ -18,7 +19,7 @@ fn main() {
     match run() {
         Ok(res) => std::process::exit(res),
         Err(e) => {
-            println!("{}", e);
+            println!("{}: {}", "error".red(), e);
             std::process::exit(1)
         }
     }
