@@ -3,7 +3,7 @@ use anyhow::Result;
 use colored::*;
 
 pub fn to_bool(string: &str) -> Result<bool> {
-    match string.to_lowercase() {
+    match string.to_lowercase().as_str() {
         "true" => return Ok(true),
         "false" => return Ok(false),
         _ => {
