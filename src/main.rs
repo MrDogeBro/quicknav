@@ -21,12 +21,17 @@ fn main() {
         Err(e) => {
             let mut err_msg: String = e.to_string();
 
+            if err_msg.starts_with(format!("quicknav {}", env!("CARGO_PKG_VERSION")).as_str()) {
+                println!("{}", err_msg);
+                std::process::exit(0);
+            }
+
             if err_msg.starts_with("\u{1b}[1;31merror:\u{1b}[0m ") {
                 err_msg = err_msg.replace("\u{1b}[1;31merror:\u{1b}[0m ", "");
             }
 
             println!("{} {}", "Error:".red(), err_msg);
-            std::process::exit(1)
+            std::process::exit(1);
         }
     }
 }
