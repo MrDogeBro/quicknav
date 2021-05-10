@@ -1,6 +1,4 @@
-use anyhow::anyhow;
-use anyhow::Result;
-use colored::*;
+use anyhow::{anyhow, Result};
 
 pub fn to_bool(string: &str) -> Result<bool> {
     match string.to_lowercase().as_str() {
