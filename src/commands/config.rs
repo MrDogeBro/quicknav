@@ -18,7 +18,7 @@ pub fn config(option: Option<String>, new_value: Option<String>) -> Result<i32> 
 
             match option.as_str() {
                 "create_missing_directories" => {
-                    config.options.create_missing_directories = string::to_bool(new_value)?;
+                    config.options.create_missing_directories = string::to_bool(&new_value)?;
                     value = "create_missing_directories";
                 }
                 _ => {
