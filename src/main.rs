@@ -8,6 +8,7 @@ extern crate prettytable;
 mod commands;
 mod config;
 mod quicknav;
+mod utils;
 
 use anyhow::Result;
 use quicknav::Quicknav;
