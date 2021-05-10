@@ -8,8 +8,7 @@ pub fn to_bool(string: &str) -> Result<bool> {
         "false" => return Ok(false),
         _ => {
             return Err(anyhow!(format!(
-                "{} The argument {} is not of type bool. The value must be true or false.",
-                "error:".red(),
+                "The argument {} is not of type bool. The value must be true or false.",
                 string
             )))
         }
