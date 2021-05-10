@@ -6,7 +6,7 @@ use crate::config;
 use crate::utils::string;
 
 pub fn config(option: Option<String>, new_value: Option<String>) -> Result<i32> {
-    let config: config::Config = config::Config::load()?;
+    let mut config: config::Config = config::Config::load()?;
 
     let mut option_list = Table::new();
     option_list.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);
@@ -34,7 +34,7 @@ pub fn config(option: Option<String>, new_value: Option<String>) -> Result<i32> 
                 new_value
             );
 
-            config.update();
+            config.update()?;
             return Ok(0);
         }
 
