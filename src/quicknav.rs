@@ -34,8 +34,10 @@ pub enum Quicknav {
     /// Allows for command line configuration of
     /// options
     Config {
-        /// The option to change'
+        /// The option to change
         option: Option<String>,
+        /// The value to change the option to
+        new_value: Option<String>,
     },
     /// Initalizes the shell profile
     Init {

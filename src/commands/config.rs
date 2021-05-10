@@ -4,7 +4,7 @@ use prettytable::{format, Table};
 
 use crate::config;
 
-pub fn config(option: Option<String>) -> Result<i32> {
+pub fn config(option: Option<String>, new_value: Option<String>) -> Result<i32> {
     let config: config::Config = config::Config::load()?;
 
     let mut option_list = Table::new();
