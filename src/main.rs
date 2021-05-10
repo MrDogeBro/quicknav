@@ -10,7 +10,7 @@ mod config;
 mod quicknav;
 mod utils;
 
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use colored::*;
 use quicknav::Quicknav;
 use structopt::StructOpt;
@@ -26,17 +26,20 @@ fn main() {
 }
 
 fn run() -> Result<i32> {
-    match Quicknav::from_args() {
-        Quicknav::Get { location } => return commands::get(location),
-        Quicknav::List { shortcut } => return commands::list(shortcut),
-        Quicknav::Add {
-            shortcut,
-            location,
-            name,
-            description,
-        } => return commands::add(shortcut, location, name, description),
-        Quicknav::Remove { shortcut } => return commands::remove(shortcut),
-        Quicknav::Config { option, new_value } => return commands::config(option, new_value),
-        Quicknav::Init { shell, command } => return commands::init(shell, command),
+    match Quicknav::from_args_safe() {
+        Ok(cmd) => match cmd {
+            Quicknav::Get { location } => return commands::get(location),
+            Quicknav::List { shortcut } => return commands::list(shortcut),
+            Quicknav::Add {
+                shortcut,
+                location,
+                name,
+                description,
+            } => return commands::add(shortcut, location, name, description),
+            Quicknav::Remove { shortcut } => return commands::remove(shortcut),
+            Quicknav::Config { option, new_value } => return commands::config(option, new_value),
+            Quicknav::Init { shell, command } => return commands::init(shell, command),
+        },
+        Err(e) => return Err(anyhow!(e)),
     }
 }
