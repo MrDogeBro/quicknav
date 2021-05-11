@@ -7,113 +7,50 @@ extern crate prettytable;
 
 mod commands;
 mod config;
+mod quicknav;
+mod utils;
 
-use gag::BufferRedirect;
-use std::io::Read;
-use structopt::clap::Shell;
+use anyhow::{anyhow, Result};
+use colored::*;
+use quicknav::Quicknav;
 use structopt::StructOpt;
 
-#[derive(StructOpt)]
-enum Quicknav {
-    /// Gets the location of a provided shortcut
-    Get {
-        /// The location to find, known as a call in the
-        /// config file
-        location: String,
-    },
-    /// Lists the registered shortcuts
-    List {
-        /// The shortcut to search for
-        shortcut: Option<String>,
-    },
-    /// Adds a new shortcut
-    Add {
-        /// The shortcut itself (call)
-        shortcut: String,
-        /// The shortcut location
-        location: String,
-        /// The shortcut name
-        #[structopt(short = "n", long = "name")]
-        name: Option<String>,
-        /// The shortcut description
-        #[structopt(short = "d", long = "description")]
-        description: Option<String>,
-    },
-    /// Removes a shortcut
-    Remove {
-        /// The shortcut to remove (by call)
-        shortcut: String,
-    },
-    /// Initalizes the shell profile
-    Init {
-        /// The shell profile to use
-        shell: String,
-        /// Optional way to change the invoke command
-        #[structopt(short = "c", long = "command")]
-        command: Option<String>,
-    },
-}
-
 fn main() {
-    // handle command dispatching
-    match Quicknav::from_args() {
-        Quicknav::Get { location } => {
-            commands::get(location);
-        }
-        Quicknav::List { shortcut } => {
-            commands::list(shortcut);
-        }
-        Quicknav::Add {
-            shortcut,
-            location,
-            name,
-            description,
-        } => {
-            commands::add(shortcut, location, name, description);
-        }
-        Quicknav::Remove { shortcut } => commands::remove(shortcut),
-        Quicknav::Init { shell, command } => {
-            let supported_shells = vec!["bash", "zsh", "fish"];
-            if supported_shells.iter().any(|&s| s == shell) {
-                commands::init(shell.to_owned(), command);
-                gen_completions(shell);
-            } else {
-                println!(
-                    "echo -e \"\\033[0;31mError: Failed to load shell profile. Invalid or unsupported shell provided.\""
-                );
+    match run() {
+        Ok(res) => std::process::exit(res),
+        Err(e) => {
+            let mut err_msg: String = e.to_string();
+
+            if err_msg.starts_with(format!("quicknav {}", env!("CARGO_PKG_VERSION")).as_str()) {
+                println!("{}", err_msg);
+                std::process::exit(0);
             }
+
+            if err_msg.starts_with("\u{1b}[1;31merror:\u{1b}[0m ") {
+                err_msg = err_msg.replace("\u{1b}[1;31merror:\u{1b}[0m ", "");
+            }
+
+            println!("{} {}", "Error:".red(), err_msg);
+            std::process::exit(1);
         }
     }
 }
 
-fn gen_completions(shell: String) {
-    let mut shell_profile = Shell::Bash;
-
-    if shell == "bash" {
-        shell_profile = Shell::Bash;
-    } else if shell == "zsh" {
-        shell_profile = Shell::Bash;
-
-        let mut stdout_buf = BufferRedirect::stdout().unwrap();
-        Quicknav::clap().gen_completions_to("quicknav", shell_profile, &mut std::io::stdout());
-
-        let mut completions = String::new();
-        stdout_buf.read_to_string(&mut completions).unwrap();
-        drop(stdout_buf);
-
-        println!(
-            "autoload bashcompinit\nbashcompinit\n\n{}",
-            completions.replace(
-                "complete -F _quicknav -o bashdefault -o default quicknav",
-                "$(autoload | grep -q bashcompinit) && \
-                 complete -F _quicknav -o bashdefault -o default quicknav"
-            )
-        );
-
-        return;
-    } else if shell == "fish" {
-        shell_profile = Shell::Fish;
+fn run() -> Result<i32> {
+    match Quicknav::from_args_safe() {
+        Ok(cmd) => match cmd {
+            Quicknav::Get { location } => return commands::get(location),
+            Quicknav::List { shortcut } => return commands::list(shortcut),
+            Quicknav::Add {
+                shortcut,
+                location,
+                name,
+                description,
+            } => return commands::add(shortcut, location, name, description),
+            Quicknav::Remove { shortcut } => return commands::remove(shortcut),
+            Quicknav::Config { option, new_value } => return commands::config(option, new_value),
+            Quicknav::Init { shell, command } => return commands::init(shell, command),
+        },
+        Err(e) => return Err(anyhow!(e)),
     }
-
-    Quicknav::clap().gen_completions_to("quicknav", shell_profile, &mut std::io::stdout());
 }
