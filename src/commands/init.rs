@@ -71,8 +71,7 @@ pub fn init(shell: String, command: Option<String>) -> Result<i32> {
     if supported_shells.iter().any(|&s| s == shell) {
         gen_completions(shell.to_owned())?;
     } else {
-        // @todo update to match new formatting
-        println!("echo -e \"\\033[0;31mError: Failed to load shell profile. Invalid or unsupported shell provided.\"");
+        println!("echo -e \"\\033[0;31mError:\033[0m Failed to load shell profile. Invalid or unsupported shell provided.\"");
         return Ok(1);
     }
 
