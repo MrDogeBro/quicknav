@@ -13,6 +13,7 @@ mod utils;
 use anyhow::{anyhow, Result};
 use colored::*;
 use quicknav::Quicknav;
+use structopt::clap::ErrorKind;
 use structopt::StructOpt;
 
 fn main() {
@@ -51,6 +52,13 @@ fn run() -> Result<i32> {
             Quicknav::Config { option, new_value } => return commands::config(option, new_value),
             Quicknav::Init { shell, command } => return commands::init(shell, command),
         },
-        Err(e) => return Err(anyhow!(e)),
+        Err(e) => {
+            if e.kind == ErrorKind::VersionDisplayed {
+                println!("");
+                return Ok(0);
+            }
+
+            return Err(anyhow!(e));
+        }
     }
 }
