@@ -36,8 +36,8 @@ pub fn add(
 
     if location == "." {
         shortcut_location = cwd;
-    } else if !location.starts_with(&env::var("HOME").unwrap()) {
-        shortcut_location = format!("{}/{}", cwd, location);
+    } else if location.starts_with(&env::var("HOME").unwrap()) {
+        shortcut_location = str::replace(&location, &env::var("HOME").unwrap(), "~");
     }
 
     let new_shortcut = config::Shortcut {
