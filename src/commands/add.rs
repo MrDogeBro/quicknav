@@ -47,8 +47,6 @@ pub fn add(
         calls: vec![shortcut.to_string()],
     };
 
-    println!("{:?}", new_shortcut);
-
     config.shortcuts.push(new_shortcut);
     config.update()?;
     println!("{} {}", "New shortcut added:".green(), &shortcut);
