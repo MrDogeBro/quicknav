@@ -13,8 +13,11 @@ pub fn get(location: String, search: bool) -> Result<i32> {
 
         for shortcut in &config.shortcuts {
             if shortcut.calls.iter().any(|c| c.starts_with(&location)) {
-                if let Some(call) = shortcut.calls.first() {
-                    possible_shortcuts.push(call.to_string());
+                for c in shortcut.calls.to_owned() {
+                    if c.starts_with(&location) {
+                        possible_shortcuts.push(c.to_string());
+                        break;
+                    }
                 }
             }
         }
