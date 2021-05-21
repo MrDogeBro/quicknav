@@ -1,4 +1,28 @@
 _nav() {
+  local i opts cmds
+  COMPREPLY=()
+  cmd=""
+  opts=""
+
+  for i in ${COMP_WORDS[@]}; do
+    case "${i}" in
+      nav)
+        cmd="nav"
+        ;;
+      *)
+        ;;
+    esac
+  done
+
+  if [[ $2 == -* ]]; then
+    opts="-h -V --help --version"
+    COMPREPLY=( $(compgen -W "${opts}") )
+    return 0
+  fi
+
+  opts=$(quicknav get $2 --search)
+  COMPREPLY=( $(compgen -W "${opts}") )
+  return 0
 }
 
-complete -F _quicknav -o bashdefault -o default nav
+complete -F _nav -o bashdefault -o default nav
