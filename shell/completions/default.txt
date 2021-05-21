@@ -1,0 +1,4 @@
+_nav() {
+}
+
+complete -F _quicknav -o bashdefault -o default nav
