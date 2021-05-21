@@ -65,6 +65,22 @@ fn gen_completions(shell: String) -> Result<i32> {
     Ok(0)
 }
 
+fn get_nav_completions(shell: String) -> Result<String> {
+    if shell == "bash" {
+        let completions_profile = include_str!("../../shell/completions/default.txt");
+        return Ok(completions_profile.to_string());
+    } else if shell == "zsh" {
+        let completions_profile = include_str!("../../shell/completions/default.txt");
+        return Ok(completions_profile.to_string().replace(
+            "complete -F _nav -o bashdefault -o default nav",
+            "$(autoload | grep -q bashcompinit) && \
+                 complete -F _nav -o bashdefault -o default nav",
+        ));
+    }
+
+    Ok("".to_string())
+}
+
 pub fn init(shell: String, command: Option<String>) -> Result<i32> {
     let supported_shells = vec!["bash", "zsh", "fish"];
 
@@ -74,6 +90,8 @@ pub fn init(shell: String, command: Option<String>) -> Result<i32> {
         println!("echo -e \"\\033[0;31mError:\\033[0m Failed to load shell profile. Invalid or unsupported shell provided.\"");
         return Ok(1);
     }
+
+    println!("{}", get_nav_completions(shell.to_owned())?);
 
     let mut profile: &str = "default";
 
