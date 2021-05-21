@@ -8,6 +8,21 @@ use crate::config;
 pub fn get(location: String, search: bool) -> Result<i32> {
     let config: config::Config = config::Config::load()?;
 
+    if search {
+        let mut possible_shortcuts: Vec<String> = vec![];
+
+        for shortcut in &config.shortcuts {
+            if shortcut.calls.iter().any(|c| c.starts_with(&location)) {
+                if let Some(call) = shortcut.calls.first() {
+                    possible_shortcuts.push(call.to_string());
+                }
+            }
+        }
+
+        println!("{}", possible_shortcuts.join(" "));
+        return Ok(0);
+    }
+
     for shortcut in config.shortcuts {
         if shortcut.calls.iter().any(|c| c == &location) {
             let shortcut_location = shortcut.location.replace("~", &var("HOME").unwrap());
