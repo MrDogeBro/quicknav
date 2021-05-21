@@ -7,6 +7,9 @@ pub enum Quicknav {
         /// The location to find, known as a call in the
         /// config file
         location: String,
+        /// If it should search for possible shortcuts
+        #[structopt(short = "s", long = "search")]
+        search: bool,
     },
     /// Lists the registered shortcuts
     List {
