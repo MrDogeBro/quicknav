@@ -40,7 +40,7 @@ fn main() {
 fn run() -> Result<i32> {
     match Quicknav::from_args_safe() {
         Ok(cmd) => match cmd {
-            Quicknav::Get { location } => return commands::get(location),
+            Quicknav::Get { location, search } => return commands::get(location),
             Quicknav::List { shortcut } => return commands::list(shortcut),
             Quicknav::Add {
                 shortcut,
