@@ -45,7 +45,7 @@ function __quicknav_nav() {
       __quicknav_cd "$__quicknav_result"
       return 0
     else
-      echo -e "\033[0;31m$__quicknav_result"
+      echo -e "$__quicknav_result"
       return 1
     fi
   fi

@@ -5,8 +5,26 @@ use std::path::Path;
 
 use crate::config;
 
-pub fn get(location: String) -> Result<i32> {
+pub fn get(location: String, search: bool) -> Result<i32> {
     let config: config::Config = config::Config::load()?;
+
+    if search {
+        let mut possible_shortcuts: Vec<String> = vec![];
+
+        for shortcut in &config.shortcuts {
+            if shortcut.calls.iter().any(|c| c.starts_with(&location)) {
+                for c in shortcut.calls.to_owned() {
+                    if c.starts_with(&location) {
+                        possible_shortcuts.push(c.to_string());
+                        break;
+                    }
+                }
+            }
+        }
+
+        println!("{}", possible_shortcuts.join(" "));
+        return Ok(0);
+    }
 
     for shortcut in config.shortcuts {
         if shortcut.calls.iter().any(|c| c == &location) {

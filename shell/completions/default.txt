@@ -1,0 +1,23 @@
+_nav() {
+  local i opts
+  COMPREPLY=()
+  opts=""
+
+  if [ ! -v $2 ]; then
+    opts=$(quicknav get "" --search)
+    COMPREPLY=( $(compgen -W "${opts}") )
+    return 0
+  fi
+
+  if [[ $2 == -* ]]; then
+    opts="-h -V --help --version"
+    COMPREPLY=( $(compgen -W "${opts}") )
+    return 0
+  fi
+
+  opts=$(quicknav get $2 --search)
+  COMPREPLY=( $(compgen -W "${opts}") )
+  return 0
+}
+
+complete -F _nav -o bashdefault -o default nav
