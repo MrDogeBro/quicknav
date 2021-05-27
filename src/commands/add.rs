@@ -1,6 +1,7 @@
 use anyhow::{anyhow, Result};
 use colored::*;
 use std::env;
+use std::fs;
 
 use crate::config;
 
@@ -23,7 +24,7 @@ pub fn add(
 
     let mut shortcut_name: String = shortcut.to_string();
     let mut shortcut_description: String = shortcut.to_string();
-    let mut shortcut_location = location.to_string();
+    let shortcut_location: String;
     let cwd = env::current_dir().unwrap().display().to_string();
 
     if let Some(name) = name {
@@ -38,6 +39,12 @@ pub fn add(
         shortcut_location = cwd;
     } else if location.starts_with(&env::var("HOME").unwrap()) {
         shortcut_location = str::replace(&location, &env::var("HOME").unwrap(), "~");
+    } else {
+        shortcut_location = str::replace(
+            &fs::canonicalize(location)?.display().to_string(),
+            &env::var("HOME").unwrap(),
+            "~",
+        );
     }
 
     let new_shortcut = config::Shortcut {
