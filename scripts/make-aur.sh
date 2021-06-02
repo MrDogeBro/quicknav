@@ -55,8 +55,6 @@ if [[ "$dirpath" == "."* ]]; then
     pkgrel="1"
   fi
 
-  echo $pkgrel
-
   wget "https://github.com/MrDogeBro/quicknav/archive/v$pkgver.tar.gz"
 
   sha256=$(shasum -a 256 $pkgzip | sed "s/$pkgzip//" | sed "s/ //g")
