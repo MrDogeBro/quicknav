@@ -68,4 +68,8 @@ if [[ "$dirpath" == "."* ]]; then
   sed -i "" "s/pkgrel = .*/pkgrel = ${pkgrel}/" .SRCINFO
   sed -i "" "s/source = .*/source = quicknav-v${pkgver}.tar.gz::https:\/\/github.com\/MrDogeBro\/quicknav\/archive\/v${pkgver}.tar.gz/" .SRCINFO
   sed -i "" "s/sha256sums = .*/sha256sums = $sha256/" .SRCINFO
+
+  git add PKGBUILD .SRCINFO
+  git commit -m "Update for v${pkgver} release"
+  git push
 fi
