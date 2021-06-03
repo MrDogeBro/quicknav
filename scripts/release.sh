@@ -21,7 +21,18 @@ fi
 if [[ "$dirpath" == "."* ]]; then
   cd $dirpath
 
-  echo "Releasing AUR\n"
+  echo "Releasing Cargo...\n"
+
+  cargo publish
+
+  if [ $? -eq 0 ]; then
+    echo "Released Cargo v${pkgver}\n"
+  else
+    echo "Cargo Release Failed — Stopping..."
+    exit 1
+  fi
+
+  echo "Releasing AUR...\n"
 
   ./scripts/make-aur.sh
 
@@ -32,7 +43,7 @@ if [[ "$dirpath" == "."* ]]; then
     exit 1
   fi
 
-  echo "Releasing Homebrew\n"
+  echo "Releasing Homebrew...\n"
 
   ./scripts/make-homebrew.sh
 
@@ -43,14 +54,14 @@ if [[ "$dirpath" == "."* ]]; then
     exit 1
   fi
 
-  echo "Releasing Cargo\n"
+  echo "Building Binary...\n"
 
-  cargo publish
+  cargo build --release
 
   if [ $? -eq 0 ]; then
-    echo "Released Cargo v${pkgver}\n"
+    echo "Binary Built v${pkgver}\n"
   else
-    echo "Cargo Release Failed — Stopping..."
+    echo "Binary Build Failed — Stopping..."
     exit 1
   fi
 fi
