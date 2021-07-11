@@ -12,7 +12,9 @@ mod utils;
 
 use anyhow::{anyhow, Result};
 use colored::*;
+use lazy_static::lazy_static;
 use quicknav::Quicknav;
+use regex::Regex;
 use structopt::clap::ErrorKind;
 use structopt::StructOpt;
 
@@ -22,7 +24,20 @@ fn main() {
         Err(e) => {
             let mut err_msg: String = e.to_string();
 
-            if err_msg.starts_with(format!("quicknav {}", env!("CARGO_PKG_VERSION")).as_str()) {
+            lazy_static! {
+                static ref SPLIT_PKG_VER: Vec<&'static str> =
+                    env!("CARGO_PKG_VERSION").split('.').collect();
+                static ref HELP_REGEX: Regex = Regex::new(
+                    format!(
+                        "^quicknav(?:(-[a-zA-Z]+(?:-[a-zA-Z]+)?))? {}",
+                        SPLIT_PKG_VER.join("\\.")
+                    )
+                    .as_str()
+                )
+                .unwrap();
+            }
+
+            if HELP_REGEX.is_match(&err_msg) {
                 println!("{}", err_msg);
                 std::process::exit(0);
             }
