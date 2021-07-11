@@ -19,7 +19,49 @@ else
 fi
 
 if [[ "$dirpath" == "."* ]]; then
+  if [ ! -x "$(command -v gh)" ]; then
+    echo "gh (github cli) needs to be installed for the script to work"
+    exit 1
+  fi
+
+  if [ ! -x "$(command -v wget)" ]; then
+    echo "wget needs to be installed for the script to work"
+    exit 1
+  fi
+
+  if [ ! -x "$(command -v awk)" ]; then
+    echo "awk needs to be installed for the script to work"
+    exit 1
+  fi
+
+  if [ ! -x "$(command -v sed)" ]; then
+    echo "sed needs to be installed for the script to work"
+    exit 1
+  fi
+
   cd $dirpath
+
+  echo "Building Binary...\n"
+
+  cargo build --release
+
+  if [ $? -eq 0 ]; then
+    echo "Binary Built v${pkgver}\n"
+  else
+    echo "Binary Build Failed — Stopping..."
+    exit 1
+  fi
+
+  echo "Releasing GitHub...\n"
+
+  ./scripts/make-github.sh $pkgver
+
+  if [ $? -eq 0 ]; then
+    echo "Released GitHub v${pkgver}\n"
+  else
+    echo "GitHub Release Failed — Stopping..."
+    exit 1
+  fi
 
   echo "Releasing Cargo...\n"
 
@@ -34,7 +76,7 @@ if [[ "$dirpath" == "."* ]]; then
 
   echo "Releasing AUR...\n"
 
-  ./scripts/make-aur.sh
+  ./scripts/make-aur.sh $pkgver
 
   if [ $? -eq 0 ]; then
     echo "Released AUR v${pkgver}\n"
@@ -45,23 +87,12 @@ if [[ "$dirpath" == "."* ]]; then
 
   echo "Releasing Homebrew...\n"
 
-  ./scripts/make-homebrew.sh
+  ./scripts/make-homebrew.sh $pkgver
 
   if [ $? -eq 0 ]; then
     echo "Released Homebrew v${pkgver}\n"
   else
     echo "Homebrew Release Failed — Stopping..."
-    exit 1
-  fi
-
-  echo "Building Binary...\n"
-
-  cargo build --release
-
-  if [ $? -eq 0 ]; then
-    echo "Binary Built v${pkgver}\n"
-  else
-    echo "Binary Build Failed — Stopping..."
     exit 1
   fi
 
@@ -73,7 +104,7 @@ if [[ "$dirpath" == "."* ]]; then
     exit 1
   fi
 
-  ./scripts/debbuilder/run.sh
+  ./scripts/debbuilder/run.sh $pkgver
 
   if [ $? -eq 0 ]; then
     echo "Debs Built v${pkgver}\n"

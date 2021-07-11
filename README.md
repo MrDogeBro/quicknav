@@ -138,6 +138,23 @@ $ nav maybeevenanothercall
 
 You can also check out the [example configuration](https://github.com/MrDogeBro/quicknav/blob/master/example-configuration.json).
 
+#### Adding and Removing Calls
+
+Adding and remove calls is also quite simple. Calls are what you actually enter to navigate to the desired
+shortcut. A single shortcut can have multiple calls assigned to it. You can either directly edit the configuration
+file or use the add and remove call commands to do the same job.
+
+The built in configuration commands are listed below. To get more info about a command, use the help command
+and specify which command you would like help for.
+
+```sh
+# add a new call to a shortcut
+$ quicknav add-call <shortcut> <call>
+
+# remove a call from a shortcut
+$ quicknav remove-call <call>
+```
+
 ### Options
 
 These are the options that quicknav accepts in its config file, not including shortcuts, under the options section.

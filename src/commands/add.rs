@@ -60,3 +60,38 @@ pub fn add(
 
     Ok(0)
 }
+
+pub fn add_call(shortcut: String, call: String) -> Result<i32> {
+    let mut config: config::Config = config::Config::load()?;
+    let mut found_shortcut = false;
+    let mut shortcut_index: usize = 0;
+
+    for (i, shortcut_conf) in &mut config.shortcuts.iter().enumerate() {
+        if shortcut_conf.calls.iter().any(|c| c == &shortcut) {
+            found_shortcut = true;
+            shortcut_index = i;
+        }
+    }
+
+    if !found_shortcut {
+        return Err(anyhow!(format!(
+            "Shortcut with call {} was not found.",
+            shortcut,
+        )));
+    }
+
+    for shortcut_conf in &mut config.shortcuts {
+        if shortcut_conf.calls.iter().any(|c| c == &call) {
+            return Err(anyhow!(format!(
+                "Call {} already exists on the shortcut named {}.",
+                &call, shortcut_conf.name
+            )));
+        }
+    }
+
+    config.shortcuts[shortcut_index].calls.push(call.to_owned());
+    config.update()?;
+    println!("{} {}", "New call added:".green(), &call);
+
+    Ok(0)
+}

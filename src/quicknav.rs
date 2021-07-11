@@ -29,6 +29,15 @@ pub enum Quicknav {
         #[structopt(short = "d", long = "description")]
         description: Option<String>,
     },
+    /// Adds a new call for an existing
+    /// shortcut
+    AddCall {
+        /// One of the calls for the shortcut
+        /// you are trying to add on to
+        shortcut: String,
+        /// The call you want to be added
+        call: String,
+    },
     /// Edits an existing shortcut
     Edit {
         /// The shortcut itself (call)
@@ -46,6 +55,12 @@ pub enum Quicknav {
     Remove {
         /// The shortcut to remove (by call)
         shortcut: String,
+    },
+    /// Removes a call for an existing
+    /// shortcut without removing the shortcut
+    RemoveCall {
+        /// The call you are trying to remove
+        call: String,
     },
     /// Allows for command line configuration of
     /// options
