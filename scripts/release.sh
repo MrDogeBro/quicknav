@@ -41,6 +41,17 @@ if [[ "$dirpath" == "."* ]]; then
 
   cd $dirpath
 
+  echo "Building Binary...\n"
+
+  cargo build --release
+
+  if [ $? -eq 0 ]; then
+    echo "Binary Built v${pkgver}\n"
+  else
+    echo "Binary Build Failed — Stopping..."
+    exit 1
+  fi
+
   echo "Releasing GitHub...\n"
 
   ./scripts/make-github.sh $pkgver
@@ -82,17 +93,6 @@ if [[ "$dirpath" == "."* ]]; then
     echo "Released Homebrew v${pkgver}\n"
   else
     echo "Homebrew Release Failed — Stopping..."
-    exit 1
-  fi
-
-  echo "Building Binary...\n"
-
-  cargo build --release
-
-  if [ $? -eq 0 ]; then
-    echo "Binary Built v${pkgver}\n"
-  else
-    echo "Binary Build Failed — Stopping..."
     exit 1
   fi
 
