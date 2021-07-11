@@ -43,7 +43,7 @@ if [[ "$dirpath" == "."* ]]; then
 
   echo "Releasing GitHub...\n"
 
-  ./scripts/make-github.sh
+  ./scripts/make-github.sh $pkgver
 
   if [ $? -eq 0 ]; then
     echo "Released GitHub v${pkgver}\n"
@@ -65,7 +65,7 @@ if [[ "$dirpath" == "."* ]]; then
 
   echo "Releasing AUR...\n"
 
-  ./scripts/make-aur.sh
+  ./scripts/make-aur.sh $pkgver
 
   if [ $? -eq 0 ]; then
     echo "Released AUR v${pkgver}\n"
@@ -76,7 +76,7 @@ if [[ "$dirpath" == "."* ]]; then
 
   echo "Releasing Homebrew...\n"
 
-  ./scripts/make-homebrew.sh
+  ./scripts/make-homebrew.sh $pkgver
 
   if [ $? -eq 0 ]; then
     echo "Released Homebrew v${pkgver}\n"
@@ -104,7 +104,7 @@ if [[ "$dirpath" == "."* ]]; then
     exit 1
   fi
 
-  ./scripts/debbuilder/run.sh
+  ./scripts/debbuilder/run.sh $pkgver
 
   if [ $? -eq 0 ]; then
     echo "Debs Built v${pkgver}\n"
