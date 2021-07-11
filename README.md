@@ -12,6 +12,7 @@ A way to quickly navigate your filesystem from the command line.
   - [Adding Quicknav to Your Shell](#adding-quicknav-to-your-shell)
 - [Configuring Quicknav](#configuring-quicknav)
   - [Adding and Removing Shortcuts](#adding-and-removing-shortcuts)
+  - [Editing Shortcuts](#editing-shortcuts)
   - [Options](#options)
     - [Create Missing Directories](#create-missing-directories)
   - [Init Flags](#init-flags)
@@ -137,6 +138,24 @@ $ nav maybeevenanothercall
 ```
 
 You can also check out the [example configuration](https://github.com/MrDogeBro/quicknav/blob/master/example-configuration.json).
+
+#### Editing Shortcuts
+
+Editing existing shortcuts is achieved using `quicknav edit` which takes two positional arguments `shortcut` and optional `location`, as well as two optional flag arguments `name` and `description`.
+
+```sh
+# changing the description of a shortcut called projects
+$ quicknav edit projects --description "This is our new description"
+
+# changing the name of a shortcut called personal to business
+$ quicknav edit personal --name business
+
+# changing the location of a shortcut called documents
+$ quicknav edit documents ~/Documents
+
+# changing everything for a shortcut called aggregate
+$ quicknav edit aggregate /home/myuser/projects --name "root" --description "All my projects"
+```
 
 #### Adding and Removing Calls
 
