@@ -57,7 +57,10 @@ pub fn edit(
     }
 
     if !valid_shortcut {
-        return Err(anyhow!(format!("No existing call matching {}.",&shortcut)));
+        return Err(anyhow!(format!(
+            "Shortcut with call {} was not found.",
+            shortcut,
+        )));
     }
 
     config.update()?;
