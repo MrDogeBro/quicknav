@@ -51,7 +51,7 @@ pub fn edit(
 
             if let Some(description) = &description {
                 shortcut_conf.description = description.to_owned();
-                res.push_str(&format!("\nDescription: {}", &description))
+                res.push_str(&format!("\nDescription: {}", &description));
             }
         }
     }
