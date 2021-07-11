@@ -56,4 +56,8 @@ if [[ "$dirpath" == "."* ]]; then
   sed -i "" "s/version .*/version \"${pkgver}\"/" Formula/quicknav.rb
   sed -i "" "s/sha256 .*/sha256 \"${sha256}\"/" Formula/quicknav.rb
   sed -i "" "s/url .*/url \"https:\/\/github.com\/MrDogeBro\/quicknav\/archive\/v${pkgver}.tar.gz\"/" Formula/quicknav.rb
+
+  git add Formula/quicknav.rb
+  git commit -m "Update for v${pkgver} release"
+  git push
 fi
