@@ -38,5 +38,5 @@ if [[ "$dirpath" == "."* ]]; then
   # you'll get yer .deb file in a few minutes. It runs faster after you've used it the first time.
   docker run -v "$(pwd)/debs:/debs" rustscan-builder
 
-  gh release -R MrDogeBro/quicknav upload v${pkgver} debs/quicknav_${pkgver}_amd64.deb debs/quicknav_${pkgver}_armhf.deb debs/quicknav_${pkgver}_i386.deb
+  gh release -R MrDogeBro/quicknav upload v${pkgver} debs/quicknav_${pkgver}_*.deb
 fi
