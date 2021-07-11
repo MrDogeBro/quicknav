@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$1" ]; then
+  echo "Package version not passed in"
+  exit 1
+fi
+
 pkgver=$1
 currdir="$(pwd)"
 dirpath=""
