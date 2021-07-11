@@ -27,7 +27,10 @@ pub fn edit(
             valid_shortcut = true;
 
             match &name {
-                Some(n) => res.push_str(n),
+                Some(n) => {
+                    shortcut_conf.name = n.to_owned();
+                    res.push_str(n);
+                },
                 _ => res.push_str(&shortcut_conf.name),
             }
 
