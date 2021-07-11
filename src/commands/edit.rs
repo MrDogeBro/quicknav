@@ -27,8 +27,8 @@ pub fn edit(
             valid_shortcut = true;
 
             match &name {
-                Some(n) => res.push_str(&format!("{}", n)),
-                _ => res.push_str(&format!("{}", shortcut_conf.name)),
+                Some(n) => res.push_str(n),
+                _ => res.push_str(&shortcut_conf.name),
             }
 
             if let Some(location) = &location {
