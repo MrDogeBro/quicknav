@@ -55,6 +55,14 @@ pub fn remove_call(call: String) -> Result<i32> {
         )));
     }
 
+    if config.shortcuts[shortcut_index].calls.iter().count() == 1 {
+        return Err(anyhow!(format!(
+            "Shortcuts must have one call. Please either add a new call before trying to remove one or remove the whole shortcut using {} {}",
+            "quicknav remove".yellow(),
+            call.yellow(),
+        )));
+    }
+
     config.shortcuts[shortcut_index].calls.remove(call_index);
     config.update()?;
     println!("{} {}", "Call removed:".green(), &call);
