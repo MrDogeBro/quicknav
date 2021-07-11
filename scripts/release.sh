@@ -19,7 +19,38 @@ else
 fi
 
 if [[ "$dirpath" == "."* ]]; then
+  if [ ! -x "$(command -v gh)" ]; then
+    echo "gh (github cli) needs to be installed for the script to work"
+    exit 1
+  fi
+
+  if [ ! -x "$(command -v wget)" ]; then
+    echo "wget needs to be installed for the script to work"
+    exit 1
+  fi
+
+  if [ ! -x "$(command -v awk)" ]; then
+    echo "awk needs to be installed for the script to work"
+    exit 1
+  fi
+
+  if [ ! -x "$(command -v sed)" ]; then
+    echo "sed needs to be installed for the script to work"
+    exit 1
+  fi
+
   cd $dirpath
+
+  echo "Releasing GitHub...\n"
+
+  ./scripts/make-github.sh
+
+  if [ $? -eq 0 ]; then
+    echo "Released GitHub v${pkgver}\n"
+  else
+    echo "GitHub Release Failed — Stopping..."
+    exit 1
+  fi
 
   echo "Releasing Cargo...\n"
 
