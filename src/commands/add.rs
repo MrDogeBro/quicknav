@@ -16,8 +16,8 @@ pub fn add(
     for shortcut_conf in &mut config.shortcuts {
         if shortcut_conf.calls.iter().any(|c| c == &shortcut) {
             return Err(anyhow!(format!(
-                "Shortcut with call {} already exists.",
-                &shortcut
+                "Shortcut with call {} already exists. Consider using {}.",
+                &shortcut, format!("quicknav edit {}", &shortcut).yellow()
             )));
         }
     }

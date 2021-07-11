@@ -29,6 +29,19 @@ pub enum Quicknav {
         #[structopt(short = "d", long = "description")]
         description: Option<String>,
     },
+    /// Edits an existing shortcut
+    Edit {
+        /// The shortcut itself (call)
+        shortcut: String,
+        /// The shortcut location
+        location: Option<String>,
+        /// The shortcut name
+        #[structopt(short = "n", long = "name")]
+        name: Option<String>,
+        /// The shortcut description
+        #[structopt(short = "d", long = "description")]
+        description: Option<String>,
+    },
     /// Removes a shortcut
     Remove {
         /// The shortcut to remove (by call)
