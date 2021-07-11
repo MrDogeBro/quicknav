@@ -12,11 +12,13 @@ pub enum Quicknav {
         search: bool,
     },
     /// Lists the registered shortcuts
+    #[structopt(alias = "ls")]
     List {
         /// The shortcut to search for
         shortcut: Option<String>,
     },
     /// Adds a new shortcut
+    #[structopt(alias = "new")]
     Add {
         /// The shortcut itself (call)
         shortcut: String,
@@ -31,6 +33,7 @@ pub enum Quicknav {
     },
     /// Adds a new call for an existing
     /// shortcut
+    #[structopt(alias = "new-call")]
     AddCall {
         /// One of the calls for the shortcut
         /// you are trying to add on to
@@ -52,18 +55,21 @@ pub enum Quicknav {
         description: Option<String>,
     },
     /// Removes a shortcut
+    #[structopt(aliases = &["rm", "del", "delete"])]
     Remove {
         /// The shortcut to remove (by call)
         shortcut: String,
     },
     /// Removes a call for an existing
     /// shortcut without removing the shortcut
+    #[structopt(aliases = &["rm-call", "del-call", "delete-call"])]
     RemoveCall {
         /// The call you are trying to remove
         call: String,
     },
     /// Allows for command line configuration of
     /// options
+    #[structopt(aliases = &["conf", "cfg", "cf"])]
     Config {
         /// The option to change
         option: Option<String>,
