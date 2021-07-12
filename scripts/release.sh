@@ -41,62 +41,62 @@ if [[ "$dirpath" == "."* ]]; then
 
   cd $dirpath
 
-  echo "Building Binary...\n"
+  echo -e "Building Binary...\n"
 
   cargo build --release
 
   if [ $? -eq 0 ]; then
-    echo "Binary Built v${pkgver}\n"
+    echo -e "Binary Built v${pkgver}\n"
   else
     echo "Binary Build Failed — Stopping..."
     exit 1
   fi
 
-  echo "Releasing GitHub...\n"
+  echo -e "Releasing GitHub...\n"
 
   ./scripts/make-github.sh $pkgver
 
   if [ $? -eq 0 ]; then
-    echo "Released GitHub v${pkgver}\n"
+    echo -e "Released GitHub v${pkgver}\n"
   else
     echo "GitHub Release Failed — Stopping..."
     exit 1
   fi
 
-  echo "Releasing Cargo...\n"
+  echo -e "Releasing Cargo...\n"
 
   cargo publish
 
   if [ $? -eq 0 ]; then
-    echo "Released Cargo v${pkgver}\n"
+    echo -e "Released Cargo v${pkgver}\n"
   else
     echo "Cargo Release Failed — Stopping..."
     exit 1
   fi
 
-  echo "Releasing AUR...\n"
+  echo -e "Releasing AUR...\n"
 
   ./scripts/make-aur.sh $pkgver
 
   if [ $? -eq 0 ]; then
-    echo "Released AUR v${pkgver}\n"
+    echo -e "Released AUR v${pkgver}\n"
   else
     echo "AUR Release Failed — Stopping..."
     exit 1
   fi
 
-  echo "Releasing Homebrew...\n"
+  echo -e "Releasing Homebrew...\n"
 
   ./scripts/make-homebrew.sh $pkgver
 
   if [ $? -eq 0 ]; then
-    echo "Released Homebrew v${pkgver}\n"
+    echo -e "Released Homebrew v${pkgver}\n"
   else
     echo "Homebrew Release Failed — Stopping..."
     exit 1
   fi
 
-  echo "Building Debs...\n"
+  echo -e "Building Debs...\n"
 
   if [ ! -x "$(command -v docker)" ]; then
     echo "docker needs to be installed for the script to work"
@@ -107,7 +107,7 @@ if [[ "$dirpath" == "."* ]]; then
   ./scripts/debbuilder/run.sh $pkgver
 
   if [ $? -eq 0 ]; then
-    echo "Debs Built v${pkgver}\n"
+    echo -e "Debs Built v${pkgver}\n"
   else
     echo "Debs Build Failed — Stopping..."
     exit 1
