@@ -39,6 +39,11 @@ if [[ "$dirpath" == "."* ]]; then
     exit 1
   fi
 
+  if [ ! -x "$(command -v docker)" ]; then
+    echo "docker needs to be installed for the script to work"
+    exit 1
+  fi
+
   cd $dirpath
 
   echo -e "Building Binary...\n"
@@ -97,12 +102,6 @@ if [[ "$dirpath" == "."* ]]; then
   fi
 
   echo -e "Building Debs...\n"
-
-  if [ ! -x "$(command -v docker)" ]; then
-    echo "docker needs to be installed for the script to work"
-    echo "Debs Build Failed — Stopping..."
-    exit 1
-  fi
 
   ./scripts/debbuilder/run.sh $pkgver
 
