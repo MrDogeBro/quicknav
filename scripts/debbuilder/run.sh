@@ -28,6 +28,11 @@ if [[ "$dirpath" == "."* ]]; then
     exit 1
   fi
 
+  if [ ! -x "$(command -v docker)" ]; then
+    echo "docker needs to be installed for the script to work"
+    exit 1
+  fi
+
   cd $dirpath
 
   docker build -t rustscan-builder . || exit
