@@ -1,0 +1,145 @@
+name: Update labels for moved card
+
+on:
+  project_card:
+    types:
+      [moved]
+
+jobs:
+  automate-issue-labels:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Matticusau/projectcard-autolabel@v1.0.0
+        with:
+          repo-token: ${{ secrets.GHPROJECT_TOKEN }}
+          projectfilter-config: '{"include":["*"], "exclude":[]}'
+          autolabel-config: '[
+            {
+              "column":"Need to Look Into",
+              "add_labels":["status/investigating"],
+              "remove_labels":[
+                "status/accepted",
+                "status/blocked",
+                "status/duplicate",
+                "status/pending",
+                "status/discussion",
+                "status/completed",
+                "status/help-wanted",
+                "status/wont-fix",
+                "status/revision-needed",
+                "status/on-hold"
+              ]
+            },
+            {
+              "column":"Bugs",
+              "add_labels":["status/accepted"],
+              "remove_labels":[
+                "status/investigating",
+                "status/blocked",
+                "status/duplicate",
+                "status/pending",
+                "status/discussion",
+                "status/completed",
+                "status/help-wanted",
+                "status/wont-fix",
+                "status/revision-needed",
+                "status/on-hold"
+              ]
+            },
+            {
+              "column":"Good for Contributors",
+              "add_labels":["status/help-wanted"],
+              "remove_labels":[
+                "status/investigating",
+                "status/accepted",
+                "status/blocked",
+                "status/duplicate",
+                "status/pending",
+                "status/discussion",
+                "status/completed",
+                "status/wont-fix",
+                "status/revision-needed",
+                "status/on-hold"
+              ]
+            },
+            {
+              "column":"Someone is Working On It",
+              "add_labels":["status/pending"],
+              "remove_labels":[
+                "status/investigating",
+                "status/accepted",
+                "status/blocked",
+                "status/duplicate",
+                "status/discussion",
+                "status/completed",
+                "status/help-wanted",
+                "status/wont-fix",
+                "status/revision-needed",
+                "status/on-hold"
+              ]
+            },
+            {
+              "column":"MrDogeBro is Working On It",
+              "add_labels":["status/pending"],
+              "remove_labels":[
+                "status/investigating",
+                "status/accepted",
+                "status/blocked",
+                "status/duplicate",
+                "status/discussion",
+                "status/completed",
+                "status/help-wanted",
+                "status/wont-fix",
+                "status/revision-needed",
+                "status/on-hold"
+              ]
+            },
+            {
+              "column":"Need To Do",
+              "add_labels":["status/accepted"],
+              "remove_labels":[
+                "status/investigating",
+                "status/blocked",
+                "status/duplicate",
+                "status/pending",
+                "status/discussion",
+                "status/completed",
+                "status/help-wanted",
+                "status/wont-fix",
+                "status/revision-needed",
+                "status/on-hold"
+              ]
+            },
+            {
+              "column":"Ready to Merge",
+              "add_labels":["status/completed"],
+              "remove_labels":[
+                "status/investigating",
+                "status/accepted",
+                "status/blocked",
+                "status/duplicate",
+                "status/pending",
+                "status/discussion",
+                "status/help-wanted",
+                "status/wont-fix",
+                "status/revision-needed",
+                "status/on-hold"
+              ]
+            },
+            {
+              "column":"Waiting for Reply",
+              "add_labels":["status/revision-needed"],
+              "remove_labels":[
+                "status/investigating",
+                "status/accepted",
+                "status/blocked",
+                "status/duplicate",
+                "status/pending",
+                "status/discussion",
+                "status/completed",
+                "status/help-wanted",
+                "status/wont-fix",
+                "status/on-hold"
+              ]
+            }
+]'
