@@ -8,8 +8,7 @@ jobs:
   automate-issue-done:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/modified-project-automation-plus
+      - uses: alex-page/github-project-automation-plus@v0.8.1
         if: ${{ github.event.sender.login == 'MrDogeBro' &&
           github.event.issue.state == 'closed' &&
           github.event.issue.milestone.state == 'closed' &&
