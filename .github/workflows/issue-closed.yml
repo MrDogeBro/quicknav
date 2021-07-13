@@ -1,0 +1,38 @@
+name: Move closed issues in project board
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  automate-project-columns:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: alex-page/github-project-automation-plus@v0.8.1
+        if:
+          ${{ contains( github.event.issue.labels.*.name, 'status/accepted') ||
+          contains( github.event.issue.labels.*.name, 'status/pending') ||
+          contains( github.event.issue.labels.*.name, 'status/completed') }}
+        with:
+          project: Main
+          column: Ready to Merge
+          repo-token: ${{ secrets.GHPROJECT_TOKEN }}
+      - uses: alex-page/github-project-automation-plus@v0.8.1
+        if: ${{ contains( github.event.issue.labels.*.name, 'status/blocked') ||
+          contains( github.event.issue.labels.*.name, 'status/duplicate') ||
+          contains( github.event.issue.labels.*.name, 'status/wont-fix') }}
+        with:
+          project: Main
+          column: Done
+          repo-token: ${{ secrets.GHPROJECT_TOKEN }}
+      - uses: alex-page/github-project-automation-plus@v0.8.1
+        if:
+          ${{ contains( github.event.issue.labels.*.name, 'status/investigating') ||
+          contains( github.event.issue.labels.*.name, 'status/discussion') ||
+          contains( github.event.issue.labels.*.name, 'status/help-wanted') ||
+          contains( github.event.issue.labels.*.name, 'status/revision-needed') ||
+          contains( github.event.issue.labels.*.name, 'status/on-hold') }}
+        with:
+          project: Main
+          column: Manual Review Required
+          repo-token: ${{ secrets.GHPROJECT_TOKEN }}

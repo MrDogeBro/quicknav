@@ -1,0 +1,15 @@
+name: Comment on issues after milestone is closed
+
+on:
+  milestone:
+    types: [closed]
+
+jobs:
+  automate-issue-milestones:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: bflad/action-milestone-comment@v1
+        with:
+          token: ${{ secrets.GHPROJECT_TOKEN }}
+          state: closed
+          body: This functionality has been released in v${{ github.event.milestone.title }}.
