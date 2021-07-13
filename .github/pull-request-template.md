@@ -12,4 +12,5 @@
    - [ ] This is a breaking change (requires major version update).
 
 ## Related issues
-<!-- Any issues this PR addresses -->
+<!-- Any issues this PR addresses. When listing the issues, please follow the example format below, making a list with the issues. -->
+<!-- - Closes #issue-num  -->
