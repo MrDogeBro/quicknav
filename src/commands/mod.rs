@@ -5,6 +5,7 @@ mod get;
 mod init;
 mod list;
 mod remove;
+mod interactive;
 
 pub use add::add;
 pub use edit::edit;
@@ -15,3 +16,4 @@ pub use init::init;
 pub use list::list;
 pub use remove::remove;
 pub use remove::remove_call;
+pub use interactive::shell;

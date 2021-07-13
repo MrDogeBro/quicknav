@@ -84,4 +84,9 @@ pub enum Quicknav {
         #[structopt(short = "c", long = "command")]
         command: Option<String>,
     },
+    /// Initiates interactive shell mode
+    Interactive {
+        /// Optional command to use interactively
+        command: Option<String>,
+    }
 }

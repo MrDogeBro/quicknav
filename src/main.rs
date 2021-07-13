@@ -74,6 +74,7 @@ fn run() -> Result<i32> {
             Quicknav::RemoveCall { call } => return commands::remove_call(call),
             Quicknav::Config { option, new_value } => return commands::config(option, new_value),
             Quicknav::Init { shell, command } => return commands::init(shell, command),
+            Quicknav::Interactive { command } => return commands::shell(command),
         },
         Err(e) => {
             if e.kind == ErrorKind::VersionDisplayed {
