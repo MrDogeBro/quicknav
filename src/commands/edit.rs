@@ -17,11 +17,11 @@ pub fn edit(
     let mut valid_shortcut = false;
 
     for shortcut_conf in &mut config.shortcuts {
-        if shortcut_conf.name == shortcut {
+        if shortcut_conf.name.to_lowercase() == shortcut.to_lowercase() {
             valid_shortcut = true;
 
             if let (None, None, None) = (&location, &name, &description) {
-                return Err(anyhow!("No data was provided to edit {}.", &shortcut));
+                return Err(anyhow!("No data was provided to edit {}.", shortcut));
             }
 
             match &name {
