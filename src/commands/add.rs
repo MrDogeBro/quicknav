@@ -68,7 +68,7 @@ pub fn add_call(shortcut: String, call: String) -> Result<i32> {
     let mut shortcut_index: usize = 0;
 
     for (i, shortcut_conf) in &mut config.shortcuts.iter().enumerate() {
-        if shortcut_conf.calls.iter().any(|c| c == &shortcut) {
+        if shortcut_conf.name.to_lowercase() == shortcut.to_lowercase() {
             found_shortcut = true;
             shortcut_index = i;
         }
@@ -76,7 +76,7 @@ pub fn add_call(shortcut: String, call: String) -> Result<i32> {
 
     if !found_shortcut {
         return Err(anyhow!(format!(
-            "Shortcut with call {} was not found.",
+            "Shortcut with name {} was not found.",
             shortcut,
         )));
     }
