@@ -12,6 +12,36 @@ use termion::raw::{IntoRawMode, RawTerminal};
 use termion::screen::*;
 
 
+/// Structure representing the context of the shell
+struct Context {
+
+    /// The TTY to read from and write to
+    tty: File,
+
+    /// The current line number
+    line: u16,
+
+    /// The current column number
+    column: u16,
+
+    /// The rightmost border based on characters entered on the current line
+    far_right: u16,
+
+    /// Buffer containing String of chars the user has entered on the current line
+    content: String,
+
+    /// A check for proceeding to the next phase of the interactive shell
+    check: bool,
+
+    /// The side of the terminal window
+    size: (u16, u16),
+
+    /// The alternate screen we are reading from and writing to
+    shell: AlternateScreen<RawTerminal<io::Stdout>>,
+}
+
+
+#[derive(Debug)]
 /// Enum representing the types we will write to the TTY
 enum Line {
 
@@ -50,31 +80,6 @@ impl fmt::Display for Line {
     }
 }
 
-/// Structure representing the context of the shell
-struct Context {
-
-    /// The TTY to read from and write to
-    tty: File,
-
-    /// The current line number
-    line: u16,
-
-    /// The current column number
-    column: u16,
-
-    /// Buffer containing String of chars the user has entered on the current line
-    content: String,
-
-    /// A check for proceeding to the next phase of the interactive shell
-    check: bool,
-
-    /// The side of the terminal window
-    size: (u16, u16),
-
-    /// The alternate screen we are reading from and writing to
-    shell: AlternateScreen<RawTerminal<io::Stdout>>,
-}
-
 impl Context {
 
     /// Constructs a new Context
@@ -85,6 +90,7 @@ impl Context {
             tty,
             line: 3,
             column: 1,
+            far_right: 1,
             content: String::new(),
             check: false,
             size: termion::terminal_size().unwrap(),
@@ -95,34 +101,92 @@ impl Context {
     }
 
     /// Initializes the shell
-    fn init_shell(&mut self) -> Result<()>{
+    fn init_shell(&mut self) -> Result<()> {
 
         write!(
 
             self.shell,
             "{}{}{}Welcome to the quicknav interactive shell.{}{}{}",
             clear::All,
-            cursor::Goto(1, 1),
+            self.goto(1, 1),
             color::Fg(color::Green),
             color::Fg(color::Reset),
-            cursor::Goto(1, 2),
+            self.goto(1, 2),
             "-".repeat(42),
         )?;
+        self.flush()?;
 
         write!(
 
             self.shell,
-            "{}{} Ctrl+c{} {}to exit{}{}{}",
-            cursor::Goto(self.size.0 + 2, self.size.1 - 2),
+            "{}{} Ctrl+c{} {}to exit{}{}",
+            self.goto(self.size.0 + 2, self.size.1 - 2),
             termion::style::Bold,
             termion::style::Reset,
             color::Fg(color::Red),
             termion::style::Reset,
             color::Fg(color::Reset),
-            cursor::Goto(1, 3),
         )?;
+        self.flush()?;
 
-        self.shell.flush()?;
+        write!(self.shell, "{}What would you like to do?", self.goto(1, 3),)?;
+        self.flush()?;
+        self.new_line()?;
+        self.new_line()?;
+
+        write!(self.shell, "{} [1] {}Add", color::Fg(color::Green), color::Fg(color::Reset))?;
+        self.flush()?;
+        self.new_line()?;
+
+        write!(self.shell, "{} [2] {}Edit", color::Fg(color::Yellow), color::Fg(color::Reset))?;
+        self.flush()?;
+        self.new_line()?;
+
+        write!(self.shell, "{} [3] {}Remove", color::Fg(color::Red), color::Fg(color::Reset))?;
+        self.flush()?;
+        self.new_line()?;
+        self.new_line()?;
+
+        write!(self.shell, " >> ")?;
+        self.flush()?;
+
+        Ok(())
+    }
+
+    /// Moves the cursor to the given location when used inside write! macro
+    fn goto(&self, column: u16, line: u16) -> cursor::Goto {
+
+        cursor::Goto(column, line)
+    }
+
+    /// Moves the cursor to the given location without a write! macro
+    fn goto_ext(&mut self, column: u16, line: u16) -> Result<()> {
+
+        write!(self.tty, "{}", self.goto(column, line))?;
+        self.flush()?;
+        Ok(())
+    }
+
+    /// Moves the cursor to the left
+    fn left(&mut self) -> Result<()> {
+
+        if let false = self.column == 1 {
+
+            self.column -= 1;
+            self.goto_ext(self.column, self.line)?;
+        }
+
+        Ok(())
+    }
+
+    /// Moves the cursor to the right
+    fn right(&mut self) -> Result<()> {
+
+        if let true = self.column < self.far_right {
+
+            self.column += 1;
+            self.goto_ext(self.column, self.line)?;
+        }
 
         Ok(())
     }
@@ -130,22 +194,33 @@ impl Context {
     /// Pushes a char onto the buffer storing the current lines content
     fn push(&mut self, c: char) {
 
+        self.column += 1;
+        self.far_right += 1;
         self.content.push(c);
     }
 
     /// Pops the last char from the buffer storing the current lines content
     fn pop(&mut self) {
 
+        self.column -= 1;
+        self.far_right -= 1;
         self.content.pop();
+    }
+
+    /// Flushes the shell
+    fn flush(&mut self) -> Result<()> {
+
+        self.shell.flush()?;
+
+        Ok(())
     }
 
     /// Writes a char to the TTY
     fn write_char(&mut self, c: char) -> Result<()> {
 
-        self.column += 1;
         self.push(c);
-
         write!(self.tty, "{}", c)?;
+        self.flush()?;
 
         Ok(())
     }
@@ -154,8 +229,7 @@ impl Context {
     fn write_line(&mut self, line: Line) -> Result<()> {
 
         write!(self.tty, "{}", line)?;
-        self.new_line()?;
-        self.shell.flush()?;
+        self.flush()?;
 
         Ok(())
     }
@@ -163,14 +237,19 @@ impl Context {
     /// Write a new line to the TTY
     fn new_line(&mut self) -> Result<()> {
 
+        // TODO -- use a process input function to parse user input as they hit enter
+
         // Position the cursor one line down, in the first column
         self.column = 1;
         self.line += 1;
+        self.far_right = 1;
 
         write!(
             self.tty, "{}",
-            cursor::Goto(self.column, self.line),
+            self.goto(self.column, self.line),
         )?;
+
+        self.flush()?;
 
         Ok(())
     }
@@ -196,13 +275,14 @@ impl Context {
             1 => {},
             _ => {
 
-                self.column -= 1;
                 self.pop();
 
                 write!(self.tty,
-                    "{}{}{}", cursor::Goto(self.column, self.line),
-                    " ", cursor::Goto(self.column, self.line),
+                    "{}{}{}", self.goto(self.column, self.line),
+                    " ", self.goto(self.column, self.line),
                 )?;
+
+                self.flush()?;
             }
         }
 
@@ -213,10 +293,10 @@ impl Context {
 /// Public facing entry point to the interactive shell
 pub fn shell(command: Option<String>) -> Result<i32> {
 
-    interactive_shell()
+    interactive()
 }
 
-fn interactive_shell() -> Result<i32> {
+fn interactive() -> Result<i32> {
 
     // Initialize a new shell and Context
     let stdin = io::stdin();
@@ -233,8 +313,8 @@ fn interactive_shell() -> Result<i32> {
             Key::Delete => ctx.del()?,
             Key::Up => {}
             Key::Down => {}
-            Key::Left => {}
-            Key::Right => {}
+            Key::Left => ctx.left()?,
+            Key::Right => ctx.right()?,
             Key::Char('\n') => {
                 ctx.new_line()?;
                 ctx.write_line(Line::Str(format!("Content: {}", ctx.content.clone())))?; // just testing this here
@@ -341,12 +421,12 @@ fn interactive_shell() -> Result<i32> {
             _ => {write!(ctx.tty, "bad {:?}", c)?},
          }
 
-        ctx.shell.flush()?;
+        ctx.flush()?;
     }
 
     // Exit the interactive shell
     write!(ctx.tty, "{}", ToMainScreen)?;
-    ctx.shell.flush()?;
+    ctx.flush()?;
 
     Ok(0)
 }
