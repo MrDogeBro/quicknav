@@ -9,7 +9,7 @@ pub fn remove(shortcut: String) -> Result<i32> {
     let mut index_to_remove: usize = 0;
 
     for (i, shortcut_conf) in &mut config.shortcuts.iter().enumerate() {
-        if shortcut_conf.calls.iter().any(|c| c == &shortcut) {
+        if shortcut_conf.name.to_lowercase() == shortcut.to_lowercase() {
             found_shortcut = true;
             index_to_remove = i;
         }
@@ -59,7 +59,7 @@ pub fn remove_call(call: String) -> Result<i32> {
         return Err(anyhow!(format!(
             "Shortcuts must have one call. Please either add a new call before trying to remove one or remove the whole shortcut using {} {}",
             "quicknav remove".yellow(),
-            call.yellow(),
+            config.shortcuts[shortcut_index].name.yellow(),
         )));
     }
 
