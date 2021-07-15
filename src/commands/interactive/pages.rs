@@ -74,7 +74,5 @@ pub fn welcome_page(ctx: &mut Context) -> Result<()> {
     ctx.write_line(Line::Str(" >> ".to_owned()))?;
     ctx.goto_ext(ctx.column, ctx.line)?;
 
-    
-
     Ok(())
 }

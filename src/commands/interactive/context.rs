@@ -182,6 +182,18 @@ impl Context {
 
     /// Deletes the character following the cursor from the TTY
     pub fn del(&mut self) -> Result<()> {
+        // Only delete if we aren't at the rightmost character boundary
+        if self.column < self.far_right {
+            for (i , _) in self.content.clone().iter().enumerate() {
+                if (i + 5) as u16 == self.column {
+                    self.content.remove(i);
+                    self.far_right -= 1;
+                    self.rewrite()?;
+                    break;
+                }
+            }
+        }
+
         Ok(())
     }
 
