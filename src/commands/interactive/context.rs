@@ -114,23 +114,15 @@ impl Context {
         // Handle case where we are writing in the middle of the line
         if self.column < self.far_right {
             for (i , _) in self.content.clone().iter().enumerate() {
-                //write!(self.tty, "i {}, col {} ", i + 6, self.column)?;
                 if (i + 5) as u16 == self.column {
-                    //write!(self.tty, "yes")?; self.flush()?;
+                    self.content.insert(i, c);
+                    self.far_right += 1;
 
-                    match self.column {
-                        5 => {
-                            self.content.insert(i, c);
-                            self.far_right += 1;
-                            self.rewrite()?;
-                        }
-                        _ => {
-                            self.content.insert(i, c);
-                            self.far_right += 1;
-                            self.column += 1;
-                            self.rewrite()?;
-                        }
+                    if let true = self.column != 5 {
+                        self.column += 1
                     }
+
+                    self.rewrite()?;
                     break;
                 }
             }
