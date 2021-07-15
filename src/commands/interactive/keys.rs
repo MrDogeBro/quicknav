@@ -9,9 +9,9 @@ use termion::input::TermRead;
 
 use super::*;
 
-pub fn map_keys(ctx: &mut Context, stdin: io::Stdin) -> Result<i32> {
-    ctx.base_shell()?;
-    ctx.welcome_page()?;
+pub fn map_keys(mut ctx: Context, stdin: io::Stdin) -> Result<i32> {
+    base_shell(&mut ctx, "Welcome to the Quicknav interactive shell!")?;
+    welcome_page(&mut ctx)?;
 
     // Iterate over key presses and act accordingly
     for c in stdin.keys().map(|c| c.unwrap()) {
@@ -24,8 +24,10 @@ pub fn map_keys(ctx: &mut Context, stdin: io::Stdin) -> Result<i32> {
             Key::Left => ctx.left()?,
             Key::Right => ctx.right()?,
             Key::Char('\n') => {
+                let content: String = ctx.content.iter().collect();
+
                 ctx.new_line()?;
-                ctx.write_line(Line::Str(format!("Content: {}", ctx.content.clone())))?; // just testing this here
+                ctx.write_line(Line::Str(format!("Content: {}", content)))?; // just testing this here
                 ctx.new_line()?;
                 ctx.purge();
             }

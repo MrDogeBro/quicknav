@@ -25,8 +25,8 @@ pub struct Context {
     /// The rightmost border based on characters entered on the current line
     pub far_right: u16,
 
-    /// Buffer containing String of chars the user has entered on the current line
-    pub content: String,
+    /// Buffer containing Vector of chars the user has entered on the current line
+    pub content: Vec<char>,
 
     /// A check for proceeding to the next phase of the interactive shell
     pub check: bool,
@@ -43,83 +43,14 @@ impl Context {
     pub fn new(tty: File) -> Self {
         Context {
             tty,
-            line: 3,
-            column: 1,
-            far_right: 1,
-            content: String::new(),
+            line: 4,
+            column: 2,
+            far_right: 5,
+            content: vec![],
             check: false,
             size: termion::terminal_size().unwrap(),
             shell: AlternateScreen::from(io::stdout().into_raw_mode().unwrap()),
         }
-    }
-
-    /// Initializes the shell
-    pub fn base_shell(&mut self) -> Result<()> {
-        write!(
-            self.shell,
-            "{}{}{}Welcome to the quicknav interactive shell.{}{}{}",
-            clear::All,
-            self.goto(1, 1),
-            color::Fg(color::Green),
-            color::Fg(color::Reset),
-            self.goto(1, 2),
-            "-".repeat(42),
-        )?;
-        self.flush()?;
-
-        write!(
-            self.shell,
-            "{}{} Ctrl+c{} {}to exit{}{}",
-            self.goto(self.size.0 + 2, self.size.1 - 2),
-            termion::style::Bold,
-            termion::style::Reset,
-            color::Fg(color::Red),
-            termion::style::Reset,
-            color::Fg(color::Reset),
-        )?;
-        self.flush()?;
-
-        Ok(())
-    }
-
-    // The first menu page
-    pub fn welcome_page(&mut self) -> Result<()> {
-        write!(self.tty, "{}What would you like to do?", self.goto(1, 3),)?;
-        self.flush()?;
-        self.new_line()?;
-        self.new_line()?;
-
-        write!(
-            self.tty,
-            "{}[1] {}Add a shortcut",
-            color::Fg(color::Green),
-            color::Fg(color::Reset)
-        )?;
-        self.flush()?;
-        self.new_line()?;
-
-        write!(
-            self.tty,
-            "{}[2] {}Edit a shortcut",
-            color::Fg(color::Yellow),
-            color::Fg(color::Reset)
-        )?;
-        self.flush()?;
-        self.new_line()?;
-
-        write!(
-            self.tty,
-            "{}[3] {}Remove a shortcut",
-            color::Fg(color::Red),
-            color::Fg(color::Reset)
-        )?;
-        self.flush()?;
-        self.new_line()?;
-        self.new_line()?;
-
-        self.goto_ext(self.column, self.line)?;
-
-        Ok(())
     }
 
     /// Moves the cursor to the given location when used inside write! macro
@@ -138,7 +69,7 @@ impl Context {
     /// Moves the cursor to the left
     pub fn left(&mut self) -> Result<()> {
         // Stops from moving left past the edge of the terminal
-        if let true = self.column > 1 {
+        if let true = self.column > 5 {
             self.column -= 1;
             self.goto_ext(self.column, self.line)?;
         }
@@ -149,7 +80,7 @@ impl Context {
     /// Moves the cursor to the right
     pub fn right(&mut self) -> Result<()> {
         // Stops from moving right off the edge of terminal
-        if let true = (self.column < self.far_right && self.column > 4) {
+        if let true = self.column < self.far_right {
             self.column += 1;
             self.goto_ext(self.column, self.line)?;
         }
@@ -180,9 +111,35 @@ impl Context {
 
     /// Writes a char to the TTY
     pub fn write_char(&mut self, c: char) -> Result<()> {
-        self.push(c);
-        write!(self.tty, "{}", c)?;
-        self.flush()?;
+        // Handle case where we are writing in the middle of the line
+        if self.column < self.far_right {
+            for (i , _) in self.content.clone().iter().enumerate() {
+                //write!(self.tty, "i {}, col {} ", i + 6, self.column)?;
+                if (i + 5) as u16 == self.column {
+                    //write!(self.tty, "yes")?; self.flush()?;
+
+                    match self.column {
+                        5 => {
+                            self.content.insert(i, c);
+                            self.far_right += 1;
+                            self.rewrite()?;
+                        }
+                        _ => {
+                            self.content.insert(i, c);
+                            self.far_right += 1;
+                            self.column += 1;
+                            self.rewrite()?;
+                        }
+                    }
+                    break;
+                }
+            }
+
+        } else {
+            self.push(c);
+            write!(self.tty, "{}", c)?;
+            self.flush()?
+        }
 
         Ok(())
     }
@@ -203,7 +160,7 @@ impl Context {
         // Position the cursor one line down, in the first column
         self.column = 1;
         self.line += 1;
-        self.far_right = 1;
+        self.far_right = 5;
 
         write!(self.tty, "{}", self.goto(self.column, self.line),)?;
 
@@ -212,9 +169,23 @@ impl Context {
         Ok(())
     }
 
+    /// Rewrites the existing line
+    pub fn rewrite(&mut self) -> Result<()> {
+        write!(self.tty, "{}{}",
+            clear::CurrentLine, self.goto(1, self.line)
+        )?;
+        self.flush()?;
+
+        let content: String = self.content.iter().collect();
+        write!(self.tty, " >> {}{}", content, self.goto(self.column, self.line))?;
+        self.flush()?;
+
+        Ok(())
+    }
+
     /// Empties the buffer containing the current lines content
     pub fn purge(&mut self) {
-        self.content = String::new();
+        self.content = vec![];
     }
 
     /// Deletes the character following the cursor from the TTY
@@ -226,19 +197,27 @@ impl Context {
     pub fn backspace(&mut self) -> Result<()> {
         match self.column {
             // Prevents going off the left side of the terminal
-            1 => {}
+            1 | 2 | 3 | 4 | 5 => {}
             _ => {
-                self.pop();
-
-                write!(
-                    self.tty,
-                    "{}{}{}",
-                    self.goto(self.column, self.line),
-                    " ",
-                    self.goto(self.column, self.line),
-                )?;
-
-                self.flush()?;
+                if self.column < self.far_right {
+                    for (i , _) in self.content.clone().iter().enumerate() {
+                        if (i + 6) as u16 == self.column {
+                            self.content.remove(i);
+                            self.column -= 1;
+                            self.far_right -= 1;
+                            self.rewrite()?;
+                            break;
+                        }
+                    }
+                } else {
+                    self.pop();
+                    write!(
+                        self.tty,
+                        "{}{}{}", self.goto(self.column, self.line),
+                        " ", self.goto(self.column, self.line),
+                    )?;
+                    self.flush()?;
+                }
             }
         }
 

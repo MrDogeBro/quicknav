@@ -14,7 +14,7 @@ impl Line {
     /// Returns the length of the line
     pub fn len(&self) -> u16 {
         match self {
-            Line::Str(s) => s.len() as u16,
+            Line::Str(s) => s.chars().count() as u16,
             _ => 1,
         }
     }
