@@ -8,7 +8,7 @@ use termion::clear;
 use super::*;
 
 /// Initializes the shell
-pub fn base_shell(ctx: &mut Context, message: &str) -> Result<()> {
+pub fn shell_base(ctx: &mut Context, message: &str) -> Result<()> {
     write!(
         ctx.shell,
         "{}{}{}{}{}{}{}",
@@ -41,38 +41,59 @@ pub fn base_shell(ctx: &mut Context, message: &str) -> Result<()> {
 pub fn welcome_page(ctx: &mut Context) -> Result<()> {
     write!(ctx.tty, "{}What would you like to do?", ctx.goto(1, 3))?;
     ctx.flush()?;
-    ctx.new_line()?;
 
     write!(
         ctx.tty,
-        "{}[1] {}Add a shortcut",
+        "{}{}[1] {}Add a shortcut",
+        ctx.goto(1, 5),
         color::Fg(color::Green),
         color::Fg(color::Reset)
     )?;
     ctx.flush()?;
-    ctx.new_line()?;
+    ctx.goto_ext(1, 6)?;
 
     write!(
         ctx.tty,
-        "{}[2] {}Edit a shortcut",
+        "{}{}[2] {}Edit a shortcut",
+        ctx.goto(1, 6),
         color::Fg(color::Yellow),
         color::Fg(color::Reset)
     )?;
     ctx.flush()?;
-    ctx.new_line()?;
 
     write!(
         ctx.tty,
-        "{}[3] {}Remove a shortcut",
+        "{}{}[3] {}Remove a shortcut",
+        ctx.goto(1, 7),
         color::Fg(color::Red),
         color::Fg(color::Reset)
     )?;
     ctx.flush()?;
-    ctx.new_line()?;
-    ctx.new_line()?;
 
+    ctx.goto_ext(1, 9)?;
     ctx.write_line(Line::Str(" >> ".to_owned()))?;
-    ctx.goto_ext(ctx.column, ctx.line)?;
+    ctx.line = 9;
 
+    Ok(())
+}
+
+pub fn add_page_base(ctx: &mut Context) -> Result<()> {
+    shell_base(ctx, "Interactive * quicknav add shortcut")?;
+    write!(ctx.tty, "{}Name your shortcut call.", ctx.goto(1, 3))?;
+    ctx.flush()?;
+
+    ctx.page = "add".to_owned();
+    ctx.line = 5;
+    ctx.purge();
+    ctx.rewrite()?;
+
+    Ok(())
+}
+
+pub fn edit_page_base(ctx: &mut Context) -> Result<()> {
+    Ok(())
+}
+
+pub fn remove_page_base(ctx: &mut Context) -> Result<()> {
     Ok(())
 }

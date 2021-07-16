@@ -86,7 +86,6 @@ pub enum Quicknav {
     },
     /// Initiates interactive shell mode
     Shell {
-        /// Optional command to use interactively
         command: Option<String>,
     },
 }

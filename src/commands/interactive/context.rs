@@ -31,6 +31,9 @@ pub struct Context {
     /// A check for proceeding to the next phase of the interactive shell
     pub check: bool,
 
+    /// The current Page of the Context
+    pub page: String,
+
     /// The side of the terminal window
     pub size: (u16, u16),
 
@@ -40,9 +43,10 @@ pub struct Context {
 
 impl Context {
     /// Constructs a new Context
-    pub fn new(tty: File) -> Self {
+    pub fn new(tty: File, page: String) -> Self {
         Context {
             tty,
+            page,
             line: 4,
             column: 2,
             far_right: 5,
@@ -85,6 +89,48 @@ impl Context {
             self.goto_ext(self.column, self.line)?;
         }
 
+        Ok(())
+    }
+
+    /// Processes content of the line
+    pub fn process_input(&mut self) -> Result<()> {
+
+        // Work in progress ...
+
+        match self.page.as_str() {
+            "welcome" => {
+                match self.content[..]{
+                    ['1'] => super::add_page_base(self)?,
+                    ['2'] => super::edit_page_base(self)?,
+                    ['3'] => super::remove_page_base(self)?,
+                    _ => {
+                        super::shell_base(self, "Invalid entry - try again")?;
+                        super::welcome_page(self)?;
+                        self.purge();
+
+
+
+                        //self.goto_ext(self.column, self.line)?;
+                        //self.rewrite()?;
+
+                    }
+                }
+            }
+            "add" => {
+                // handle add page
+            }
+            "edit" => {
+                // handle edit page
+            }
+            "remove" => {
+                // handle remove page
+            }
+            _ => {
+
+            }
+        }
+
+        //self.purge();
         Ok(())
     }
 
@@ -138,7 +184,7 @@ impl Context {
 
     /// Writes a line to the TTY
     pub fn write_line(&mut self, line: Line) -> Result<()> {
-        self.column += line.len();
+        //self.column += line.len();
         write!(self.tty, "{}", line)?;
         self.flush()?;
 
