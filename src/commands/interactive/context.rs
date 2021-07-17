@@ -184,7 +184,6 @@ impl Context {
 
     /// Writes a line to the TTY
     pub fn write_line(&mut self, line: Line) -> Result<()> {
-        //self.column += line.len();
         write!(self.tty, "{}", line)?;
         self.flush()?;
 
@@ -201,7 +200,6 @@ impl Context {
         self.far_right = 5;
 
         write!(self.tty, "{}", self.goto(self.column, self.line),)?;
-
         self.flush()?;
 
         Ok(())
