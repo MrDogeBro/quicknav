@@ -1,0 +1,19 @@
+name: Move issues with completed milestones in project board
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  automate-issue-done:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: alex-page/github-project-automation-plus@v0.8.1
+        if: ${{ github.event.sender.login == 'MrDogeBro' &&
+          github.event.issue.state == 'closed' &&
+          github.event.issue.milestone.state == 'closed' &&
+          github.event.comment.body == format( 'This functionality has been released in v{0}.', github.event.issue.milestone.title ) }}
+        with:
+          project: Main
+          column: Done
+          repo-token: ${{ secrets.GHPROJECT_TOKEN }}
