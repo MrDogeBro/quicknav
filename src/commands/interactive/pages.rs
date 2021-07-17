@@ -73,17 +73,21 @@ pub fn welcome_page(ctx: &mut Context) -> Result<()> {
     ctx.goto_ext(1, 9)?;
     ctx.write_line(Line::Str(" >> ".to_owned()))?;
     ctx.line = 9;
+    ctx.column = 5;
+    ctx.far_right = 5;
 
     Ok(())
 }
 
 pub fn add_page_base(ctx: &mut Context) -> Result<()> {
     shell_base(ctx, "Interactive * quicknav add shortcut")?;
-    write!(ctx.tty, "{}Name your shortcut call.", ctx.goto(1, 3))?;
+    write!(ctx.tty, "{}Name your shortcut call.{}", ctx.goto(1, 3), ctx.goto(5, 5))?;
     ctx.flush()?;
 
     ctx.page = "add".to_owned();
     ctx.line = 5;
+    ctx.column = 5;
+    ctx.far_right = 5;
     ctx.purge();
     ctx.rewrite()?;
 
