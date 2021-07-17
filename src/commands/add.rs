@@ -6,7 +6,7 @@ use std::fs;
 use crate::config;
 
 pub fn add(
-    call: String,
+    shortcut: String,
     location: String,
     name: Option<String>,
     description: Option<String>,
@@ -14,17 +14,16 @@ pub fn add(
     let mut config: config::Config = config::Config::load()?;
 
     for shortcut_conf in &mut config.shortcuts {
-        if shortcut_conf.calls.iter().any(|c| c == &call) {
+        if shortcut_conf.calls.iter().any(|c| c == &shortcut) {
             return Err(anyhow!(format!(
                 "Shortcut with call {} already exists. Consider using {}.",
-                &call,
-                format!("quicknav edit {}", &call).yellow()
+                &shortcut, format!("quicknav edit {}", &shortcut).yellow()
             )));
         }
     }
 
-    let mut shortcut_name: String = call.to_string();
-    let mut shortcut_description: String = call.to_string();
+    let mut shortcut_name: String = shortcut.to_string();
+    let mut shortcut_description: String = shortcut.to_string();
     let shortcut_location: String;
     let cwd = env::current_dir().unwrap().display().to_string();
 
@@ -52,12 +51,12 @@ pub fn add(
         name: shortcut_name,
         description: shortcut_description,
         location: shortcut_location,
-        calls: vec![call.to_string()],
+        calls: vec![shortcut.to_string()],
     };
 
     config.shortcuts.push(new_shortcut);
     config.update()?;
-    println!("{} {}", "New shortcut added:".green(), &call);
+    println!("{} {}", "New shortcut added:".green(), &shortcut);
 
     Ok(0)
 }
@@ -68,7 +67,7 @@ pub fn add_call(shortcut: String, call: String) -> Result<i32> {
     let mut shortcut_index: usize = 0;
 
     for (i, shortcut_conf) in &mut config.shortcuts.iter().enumerate() {
-        if shortcut_conf.name.to_lowercase() == shortcut.to_lowercase() {
+        if shortcut_conf.calls.iter().any(|c| c == &shortcut) {
             found_shortcut = true;
             shortcut_index = i;
         }
@@ -76,7 +75,7 @@ pub fn add_call(shortcut: String, call: String) -> Result<i32> {
 
     if !found_shortcut {
         return Err(anyhow!(format!(
-            "Shortcut with name {} was not found.",
+            "Shortcut with call {} was not found.",
             shortcut,
         )));
     }

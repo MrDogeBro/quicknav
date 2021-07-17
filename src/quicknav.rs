@@ -14,14 +14,14 @@ pub enum Quicknav {
     /// Lists the registered shortcuts
     #[structopt(alias = "ls")]
     List {
-        /// The shortcut to search for (by name)
+        /// The shortcut to search for
         shortcut: Option<String>,
     },
     /// Adds a new shortcut
     #[structopt(alias = "new")]
     Add {
         /// The shortcut itself (call)
-        call: String,
+        shortcut: String,
         /// The shortcut location
         location: String,
         /// The shortcut name
@@ -35,29 +35,29 @@ pub enum Quicknav {
     /// shortcut
     #[structopt(alias = "new-call")]
     AddCall {
-        /// The shortcut you are trying to
-        /// add a call to (by name)
+        /// One of the calls for the shortcut
+        /// you are trying to add on to
         shortcut: String,
         /// The call you want to be added
         call: String,
     },
     /// Edits an existing shortcut
     Edit {
-        /// The shortcut to edit (by name)
+        /// The shortcut itself (call)
         shortcut: String,
-        /// The new shortcut location
+        /// The shortcut location
         location: Option<String>,
-        /// The new shortcut name
+        /// The shortcut name
         #[structopt(short = "n", long = "name")]
         name: Option<String>,
-        /// The new shortcut description
+        /// The shortcut description
         #[structopt(short = "d", long = "description")]
         description: Option<String>,
     },
     /// Removes a shortcut
     #[structopt(aliases = &["rm", "del", "delete"])]
     Remove {
-        /// The shortcut to remove (by name)
+        /// The shortcut to remove (by call)
         shortcut: String,
     },
     /// Removes a call for an existing

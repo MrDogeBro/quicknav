@@ -58,11 +58,11 @@ fn run() -> Result<i32> {
             Quicknav::Get { location, search } => return commands::get(location, search),
             Quicknav::List { shortcut } => return commands::list(shortcut),
             Quicknav::Add {
-                call,
+                shortcut,
                 location,
                 name,
                 description,
-            } => return commands::add(call, location, name, description),
+            } => return commands::add(shortcut, location, name, description),
             Quicknav::Edit {
                 shortcut,
                 location,
