@@ -9,7 +9,8 @@ use termion::clear;
 use termion::screen::AlternateScreen;
 use termion::raw::{RawTerminal, IntoRawMode};
 
-use super::Line;
+use super::utils;
+use crate::config;
 
 /// Structure representing the context of the shell
 pub struct Context {
@@ -31,6 +32,9 @@ pub struct Context {
     /// A check for proceeding to the next phase of the interactive shell
     pub check: bool,
 
+    /// The current quicknav Config
+    pub config: config::Config,
+
     /// The current Page of the Context
     pub page: String,
 
@@ -51,7 +55,8 @@ impl Context {
             column: 2,
             far_right: 5,
             content: vec![],
-            check: false,
+            check: true,
+            config: config::Config::load().unwrap(),
             size: termion::terminal_size().unwrap(),
             shell: AlternateScreen::from(io::stdout().into_raw_mode().unwrap()),
         }
@@ -97,40 +102,66 @@ impl Context {
 
         // Work in progress ...
 
+        // Display the correct next page
         match self.page.as_str() {
             "welcome" => {
-                match self.content[..]{
-                    ['1'] => super::add_page_base(self)?,
-                    ['2'] => super::edit_page_base(self)?,
-                    ['3'] => super::remove_page_base(self)?,
+                // Welcome page only accepts 1,2,3 as input
+                match self.content[..] {
+                    ['1'] => {
+                        self.check = true;
+                        super::add_page_base(self, "Name your shortcut.")?;
+                    }
+                    ['2'] => {
+                        self.check = true;
+                        super::edit_page_base(self)?;
+                    }
+                    ['3'] => {
+                        self.check = true;
+                        super::remove_page_base(self)?;
+                    }
                     _ => {
-                        super::shell_base(self, "Invalid entry - try again")?;
-                        super::welcome_page(self)?;
-                        self.purge();
-
-
-
-                        //self.goto_ext(self.column, self.line)?;
-                        //self.rewrite()?;
-
+                        self.check = false;
+                        super::shell_base(self, "Quicknav * Interactive > Home")?;
+                        super::welcome_page(self, "Invalid entry - try again.")?;
                     }
                 }
             }
+            // Add page base gathers the name the user wants to use
+            // It will accept any text thats not already a Shortcut Name
             "add" => {
-                // handle add page
+                match self.content[..] {
+                    [] => {
+                        self.check = false;
+                        super::add_page_base(self, "Name is required > Try again.")?;
+                    }
+                    _ => {
+                        if let Ok(true) = utils::validate_name(self) {
+                            self.check = true;
+                            super::add_page_one(self, "Path to the shortcut location?")?;
+                        } else {
+                            self.check = false;
+                            let name: String = self.content.iter().collect();
+                            super::add_page_base(self, &format!("`{}` is taken > Choose another name.", name))?;
+                        }
+                    }
+                }
             }
+            // Add page one gathers the shortcut location
+            // It will accept any text that is a valid path on the system
+            "add_one" => {}
+            // Edit page base gathers the name of the Shortcut to edit
+            // It will only accept valid, existing Shortcut Names
             "edit" => {
                 // handle edit page
             }
+            // Remove page gathers the name of the Shortcut to edit
+            // It will only accept valid, existing Shortcut Names
             "remove" => {
                 // handle remove page
             }
-            _ => {
-
-            }
+            _ => {}
         }
 
-        //self.purge();
         Ok(())
     }
 
@@ -183,7 +214,7 @@ impl Context {
     }
 
     /// Writes a line to the TTY
-    pub fn write_line(&mut self, line: Line) -> Result<()> {
+    pub fn write_line(&mut self, line: utils::Line) -> Result<()> {
         write!(self.tty, "{}", line)?;
         self.flush()?;
 
@@ -195,7 +226,7 @@ impl Context {
         // TODO -- use a process input function to parse user input as they hit enter
 
         // Position the cursor one line down, in the first column
-        self.column = 1;
+        self.column = 5;
         self.line += 1;
         self.far_right = 5;
 

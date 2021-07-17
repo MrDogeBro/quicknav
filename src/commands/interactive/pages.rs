@@ -7,16 +7,15 @@ use termion::clear;
 
 use super::*;
 
-/// Initializes the shell
+/// Initializes the shell with a top message and bottom quit message
 pub fn shell_base(ctx: &mut Context, message: &str) -> Result<()> {
+    ctx.purge();
     write!(
         ctx.shell,
-        "{}{}{}{}{}{}{}",
+        "{}{}{}{}{}",
         clear::All,
         ctx.goto(1, 1),
-        color::Fg(color::Green),
         message,
-        color::Fg(color::Reset),
         ctx.goto(1, 2),
         "-".repeat(message.len()),
     )?;
@@ -38,8 +37,24 @@ pub fn shell_base(ctx: &mut Context, message: &str) -> Result<()> {
 }
 
 // The first menu page
-pub fn welcome_page(ctx: &mut Context) -> Result<()> {
-    write!(ctx.tty, "{}What would you like to do?", ctx.goto(1, 3))?;
+pub fn welcome_page(ctx: &mut Context, message: &str) -> Result<()> {
+    if ctx.check {
+        write!(
+            ctx.tty,
+            "{}{}{}{}",
+            ctx.goto(1, 3),
+            color::Fg(color::Green),
+            message, color::Fg(color::Reset)
+        )?;
+    } else {
+        write!(
+            ctx.tty,
+            "{}{}{}{}",
+            ctx.goto(1, 3),
+            color::Fg(color::Red),
+            message, color::Fg(color::Reset)
+        )?;
+    }
     ctx.flush()?;
 
     write!(
@@ -72,23 +87,71 @@ pub fn welcome_page(ctx: &mut Context) -> Result<()> {
 
     ctx.goto_ext(1, 9)?;
     ctx.write_line(Line::Str(" >> ".to_owned()))?;
-    ctx.line = 9;
-    ctx.column = 5;
-    ctx.far_right = 5;
+    ctx.line = 8;
+    ctx.new_line()?;
 
     Ok(())
 }
 
-pub fn add_page_base(ctx: &mut Context) -> Result<()> {
-    shell_base(ctx, "Interactive * quicknav add shortcut")?;
-    write!(ctx.tty, "{}Name your shortcut call.{}", ctx.goto(1, 3), ctx.goto(5, 5))?;
+pub fn add_page_base(ctx: &mut Context, message: &str) -> Result<()> {
+    shell_base(ctx, "Quicknav * Interactive > Add - Name")?;
+    if ctx.check {
+        write!(
+            ctx.tty,
+            "{}{}{}{}{}",
+            ctx.goto(1, 3),
+            color::Fg(color::Green),
+            message, ctx.goto(5, 5),
+            color::Fg(color::Reset),
+        )?;
+    } else {
+        write!(
+            ctx.tty,
+            "{}{}{}{}{}",
+            ctx.goto(1, 3),
+            color::Fg(color::Red),
+            message, ctx.goto(5, 5),
+            color::Fg(color::Reset),
+        )?;
+    }
     ctx.flush()?;
 
     ctx.page = "add".to_owned();
     ctx.line = 5;
     ctx.column = 5;
     ctx.far_right = 5;
-    ctx.purge();
+    ctx.rewrite()?;
+
+    Ok(())
+}
+
+pub fn add_page_one(ctx: &mut Context, message: &str) -> Result<()> {
+    shell_base(ctx, "Quicknav * interactive > Add - Location")?;
+
+    if ctx.check {
+        write!(
+            ctx.tty,
+            "{}{}{}{}{}",
+            ctx.goto(1, 3),
+            color::Fg(color::Green),
+            message, ctx.goto(5, 5),
+            color::Fg(color::Reset),
+        )?;
+    } else {
+        write!(
+            ctx.tty,
+            "{}{}{}{}{}",
+            ctx.goto(1, 3),
+            color::Fg(color::Red),
+            message, ctx.goto(5, 5),
+            color::Fg(color::Reset),
+        )?;
+    }
+    ctx.flush()?;
+
+    ctx.column = 5;
+    ctx.far_right = 5;
+    ctx.page = "add_one".to_owned();
     ctx.rewrite()?;
 
     Ok(())

@@ -8,9 +8,9 @@ use super::*;
 
 /// Public facing entry point to the interactive shell
 pub fn shell(command: Option<String>) -> Result<i32> {
-    // Initialize a new Context and capture Stdin
     let page: String;
 
+    // If the user passed a command, begin on the corresponding page
     match command {
         Some(c) => {
             match c.to_lowercase().as_str() {
@@ -21,6 +21,7 @@ pub fn shell(command: Option<String>) -> Result<i32> {
         None => { page = "welcome".to_owned(); }
     }
 
+    // Initialize a new Context, capture Stdin, and listen for keystrokes
     let ctx = Context::new(get_tty()?, page);
     let stdin = io::stdin();
     map_keys(ctx, stdin)

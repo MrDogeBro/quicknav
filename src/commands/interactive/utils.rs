@@ -1,4 +1,8 @@
+use anyhow::Result;
+
 use std::fmt;
+
+use super::*;
 
 #[derive(Debug)]
 /// Enum representing the types we will write to the TTY
@@ -30,4 +34,17 @@ impl fmt::Display for Line {
 
         Ok(())
     }
+}
+
+/// Returns true if there is NOT a shortcut matching the content of the Context
+pub fn validate_name(ctx: &mut Context) -> Result<bool> {
+    let name: String = ctx.content.iter().collect();
+
+    for shortcut_conf in &mut ctx.config.shortcuts {
+        if shortcut_conf.name.to_lowercase() == name.to_lowercase() {
+            return Ok(false);
+        }
+    }
+
+    Ok(true)
 }

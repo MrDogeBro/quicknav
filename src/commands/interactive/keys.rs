@@ -11,12 +11,12 @@ use super::*;
 
 /// Loads base shell and begins listening for keystrokes
 pub fn map_keys(mut ctx: Context, stdin: io::Stdin) -> Result<i32> {
-    shell_base(&mut ctx, "Welcome to the Quicknav interactive shell!")?;
+    shell_base(&mut ctx, "Quicknav * Interactive - Home")?;
 
     // Check which page we should load initially
     match ctx.page.as_str() {
-        "welcome" => welcome_page(&mut ctx)?,
-        "add" => add_page_base(&mut ctx)?,
+        "welcome" => welcome_page(&mut ctx, "What would you like to do?")?,
+        "add" => add_page_base(&mut ctx, "Name your shortcut.")?,
         "edit" => edit_page_base(&mut ctx)?,
         "remove" => remove_page_base(&mut ctx)?,
         _ => {}
