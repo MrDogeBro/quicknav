@@ -87,8 +87,9 @@ pub fn welcome_page(ctx: &mut Context, message: &str) -> Result<()> {
 
     ctx.goto_ext(1, 9)?;
     ctx.write_line(Line::Str(" >> ".to_owned()))?;
-    ctx.line = 8;
-    ctx.new_line()?;
+    ctx.line = 9;
+    ctx.column = 5;
+    ctx.far_right = 5;
 
     Ok(())
 }
