@@ -1,6 +1,6 @@
 use anyhow::Result;
 
-use std::fmt;
+use std::{env, fmt, fs, io::Write};
 
 use super::*;
 
@@ -36,7 +36,7 @@ impl fmt::Display for Line {
     }
 }
 
-/// Returns true if there is NOT a shortcut matching the content of the Context
+/// Returns Ok(true) if there is NOT a shortcut matching the content of the Context
 pub fn validate_name(ctx: &mut Context) -> Result<bool> {
     let name: String = ctx.content.iter().collect();
 
@@ -46,5 +46,32 @@ pub fn validate_name(ctx: &mut Context) -> Result<bool> {
         }
     }
 
+    ctx.name = Some(name);
+
     Ok(true)
+}
+
+/// Validates the location inputted by the user
+pub fn validate_location(ctx: &mut Context) -> Result<()> {
+    let location: String = ctx.content.iter().collect();
+    let shortcut_location: String;
+    let cwd = env::current_dir().unwrap().display().to_string();
+
+    if location == "." {
+        shortcut_location = cwd;
+    } else if location.starts_with(&env::var("HOME").unwrap()) {
+        shortcut_location = str::replace(&location, &env::var("HOME").unwrap(), "~");
+    } else if location.starts_with("~") {
+        shortcut_location = location;
+    } else {
+        shortcut_location = str::replace(
+            &fs::canonicalize(location)?.display().to_string(),
+            &env::var("HOME").unwrap(),
+            "~",
+        );
+    }
+
+    ctx.location = Some(shortcut_location);
+
+    Ok(())
 }

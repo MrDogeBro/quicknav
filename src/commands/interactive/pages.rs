@@ -96,6 +96,7 @@ pub fn welcome_page(ctx: &mut Context, message: &str) -> Result<()> {
 
 pub fn add_page_base(ctx: &mut Context, message: &str) -> Result<()> {
     shell_base(ctx, "Quicknav * Interactive > Add - Name")?;
+
     if ctx.check {
         write!(
             ctx.tty,
@@ -127,7 +128,7 @@ pub fn add_page_base(ctx: &mut Context, message: &str) -> Result<()> {
 }
 
 pub fn add_page_one(ctx: &mut Context, message: &str) -> Result<()> {
-    shell_base(ctx, "Quicknav * interactive > Add - Location")?;
+    shell_base(ctx, "Quicknav * Interactive > Add - Location")?;
 
     if ctx.check {
         write!(
@@ -154,6 +155,39 @@ pub fn add_page_one(ctx: &mut Context, message: &str) -> Result<()> {
     ctx.far_right = 5;
     ctx.page = "add_one".to_owned();
     ctx.rewrite()?;
+
+    Ok(())
+}
+
+pub fn add_page_two(ctx: &mut Context, message: &str) -> Result<()> {
+    shell_base(ctx, "Quicknav * Interactive > Add - Description")?;
+
+    if ctx.check {
+        write!(
+            ctx.tty,
+            "{}{}{}{}{}",
+            ctx.goto(1, 3),
+            color::Fg(color::Green),
+            message, ctx.goto(5, 5),
+            color::Fg(color::Reset),
+        )?;
+    } else {
+        write!(
+            ctx.tty,
+            "{}{}{}{}{}",
+            ctx.goto(1, 3),
+            color::Fg(color::Red),
+            message, ctx.goto(5, 5),
+            color::Fg(color::Reset),
+        )?;
+    }
+    ctx.flush()?;
+
+    ctx.column = 5;
+    ctx.far_right = 5;
+    ctx.page = "add_two".to_owned();
+    ctx.rewrite()?;
+
 
     Ok(())
 }

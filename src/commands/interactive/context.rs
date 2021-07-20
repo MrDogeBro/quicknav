@@ -43,6 +43,18 @@ pub struct Context {
 
     /// The alternate screen we are reading from and writing to
     pub shell: AlternateScreen<RawTerminal<io::Stdout>>,
+
+    /// Placeholder for Name of a Shortcut
+    pub name: Option<String>,
+
+    /// Placeholder for Location of a Shortcut
+    pub location: Option<String>,
+
+    /// Placeholder for vector of Shortcut calls
+    pub calls: Option<Vec<String>>,
+
+    /// Placeholder for Description of a Shortcut
+    pub description: Option<String>,
 }
 
 impl Context {
@@ -59,6 +71,10 @@ impl Context {
             config: config::Config::load().unwrap(),
             size: termion::terminal_size().unwrap(),
             shell: AlternateScreen::from(io::stdout().into_raw_mode().unwrap()),
+            name: None,
+            location: None,
+            calls: None,
+            description: None,
         }
     }
 
@@ -137,6 +153,8 @@ impl Context {
                     _ => {
                         if let Ok(true) = utils::validate_name(self) {
                             self.check = true;
+                            let name: String = self.content.iter().collect();
+                            self.name = Some(name);
                             super::add_page_one(self, "Path to the shortcut location?")?;
                         } else {
                             self.check = false;
@@ -147,8 +165,29 @@ impl Context {
                 }
             }
             // Add page one gathers the shortcut location
-            // It will accept any text that is a valid path on the system
-            "add_one" => {}
+            // It will accept any text that is a valid path
+            "add_one" => {
+                match self.content[..] {
+                    [] => {
+                        self.check = false;
+                        super::add_page_one(self, "Location is required > Try again.")?;
+                    }
+                    _ => {
+                        if let Ok(()) = utils::validate_location(self) {
+                            self.check = true;
+                            super::add_page_two(self, "Additional calls? (Enter to skip)")?;
+                        } else {
+                            self.check = false;
+                            super::add_page_one(self, "Invalid Location > Try again.")?;
+                        }
+                    }
+                }
+            }
+            // Add page two gathers the Shortcut description
+            // It will accept any text, or no text
+            "add_two" => {
+
+            }
             // Edit page base gathers the name of the Shortcut to edit
             // It will only accept valid, existing Shortcut Names
             "edit" => {
@@ -215,6 +254,7 @@ impl Context {
 
     /// Writes a line to the TTY
     pub fn write_line(&mut self, line: utils::Line) -> Result<()> {
+        self.column += line.len();
         write!(self.tty, "{}", line)?;
         self.flush()?;
 
