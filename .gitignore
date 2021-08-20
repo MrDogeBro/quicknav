@@ -1,2 +1,5 @@
 target/
 scripts/debbuilder/debs/
+
+# Sphinx documentation
+docs/_build/
