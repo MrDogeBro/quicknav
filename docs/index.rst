@@ -6,22 +6,11 @@
 Quicknav Documentation
 ======================
 
-.. image:: https://readthedocs.org/projects/content-filter/badge/?version=latest
-   :target: https://content-filter.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/quicknav/badge/?version=latest
+   :target: https://quicknav.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
 
 Quicknav is a way to quickly navigate your filesystem from the command line.
-
-Features
---------
-
-- Ability to have different levels of filtration.
-- Can ignore repeated characters and infer certain characters aliases.
-- Converts non-english characters to their english equivalents such as ç to c.
-- Ignores non-printing characters.
-- Easily and very customizable.
-- Easy to get up and running.
-- No third-party dependencies.
 
 User Guide
 ----------
@@ -32,6 +21,7 @@ User Guide
    user/introduction
    user/install
    user/configuration
+   user/extra
 
 Indices and tables
 ==================
