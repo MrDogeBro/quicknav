@@ -1,5 +1,7 @@
 # Quicknav
 
+[![Documentation Status](https://readthedocs.org/projects/quicknav/badge/?version=latest)](https://quicknav.readthedocs.io/en/latest/) [![License](https://img.shields.io/github/license/MrDogeBro/content_filter.svg)](https://github.com/MrDogeBro/quicknav/blob/master/LICENSE)
+
 A way to quickly navigate your filesystem from the command line.
 
 ## Table of Contents
@@ -10,13 +12,7 @@ A way to quickly navigate your filesystem from the command line.
 - [Getting Started](#getting-started)
   - [Installing Quicknav](#installing-quicknav)
   - [Adding Quicknav to Your Shell](#adding-quicknav-to-your-shell)
-- [Configuring Quicknav](#configuring-quicknav)
-  - [Adding and Removing Shortcuts](#adding-and-removing-shortcuts)
-    - [Editing Shortcuts](#editing-shortcuts)
-    - [Adding and Removing Calls](#adding-and-removing-calls)
-  - [Options](#options)
-    - [Create Missing Directories](#create-missing-directories)
-  - [Init Flags](#init-flags)
+- [Docs](#docs)
 - [License](#license)
 
 ## What is Quicknav
@@ -86,121 +82,10 @@ Add the following to your `~/.config/fish/config.fish`
 quicknav init fish | source
 ```
 
-## Configuring Quicknav
+## Docs
 
-### Adding and Removing Shortcuts
-
-Adding and removing shortcuts is quite simple. You can either directly edit the configuration file or use the
-add and remove commands to do the same job. If you want the most configuration, then you will need to use the
-config file. The config file can be found at `~/.config/quicknav/quicknav.json` or if you have set the xdg
-config home, your config will be found at `$XDG_CONFIG_HOME/quicknav/quicknav.json`.
-
-The built in configuration commands are listed below. To get more info about a command, use the help command
-and specify which command you would like help for.
-
-```sh
-# display the help message for a command
-$ quicknav help command_name
-
-# list the registed shortcuts
-$ quicknav list [call]
-
-# add a new shortcut
-$ quicknav add <call> <location>
-
-# remove a shortcut
-$ quicknav remove <call>
-```
-
-If you would like to edit the configuration file directly, new shortcuts must follow the following json structure.
-You can add multiple calls (what you use to navigate to the location) but you are only required to include one.
-
-```json
-{
-  "name": "shortcut name",
-  "description": "shortcut description",
-  "location": "the location to jump to (~ supported)",
-  "calls": ["callname", "anothercall", "maybeevenanothercall"]
-}
-```
-
-Once you have added a shortcut, you can use the nav command to navigate to that shortcut by one of its calls.
-For example, if you want to go to the shortcut in the example above, we could use one of the following commands.
-
-```sh
-# uses the first call
-$ nav callname
-
-# uses the second call
-$ nav anothercall
-
-# uses the third call
-$ nav maybeevenanothercall
-```
-
-You can also check out the [example configuration](https://github.com/MrDogeBro/quicknav/blob/master/example-configuration.json).
-
-#### Editing Shortcuts
-
-Editing existing shortcuts is achieved using `quicknav edit` which takes two positional arguments `shortcut` and optional `location`, as well as two optional flag arguments `name` and `description`.
-
-```sh
-# changing the description of a shortcut called projects
-$ quicknav edit projects --description "This is our new description"
-
-# changing the name of a shortcut called personal to business
-$ quicknav edit personal --name business
-
-# changing the location of a shortcut called documents
-$ quicknav edit documents ~/Documents
-
-# changing everything for a shortcut called aggregate
-$ quicknav edit aggregate /home/myuser/projects --name "root" --description "All my projects"
-```
-
-#### Adding and Removing Calls
-
-Adding and remove calls is also quite simple. Calls are what you actually enter to navigate to the desired
-shortcut. A single shortcut can have multiple calls assigned to it. You can either directly edit the configuration
-file or use the add and remove call commands to do the same job.
-
-The built in configuration commands are listed below. To get more info about a command, use the help command
-and specify which command you would like help for.
-
-```sh
-# add a new call to a shortcut
-$ quicknav add-call <shortcut> <call>
-
-# remove a call from a shortcut
-$ quicknav remove-call <call>
-```
-
-### Options
-
-These are the options that quicknav accepts in its config file, not including shortcuts, under the options section.
-These options currently can only be configured by editing the config file but this will change in the future.
-Each option listed will give a description of what it does and then the the following information in a table.
-
-| Config Name                                         | Allowed Value                                               | Default Value                                |
-| --------------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------- |
-| This is the name for the option in the config file. | This is what type of value can be configured for the option | This is what the value is set to by default. |
-
-##### Create Missing Directories
-
-If set to true, quicknav will automatically create the directories in a given path if they do not exist
-when the navigation shortcut to that location is used. This is useful if you are moving your config between
-computers and would like your shortcut locations to automatically be created for you.
-
-| Config Name                | Allowed Value               | Default Value |
-| -------------------------- | --------------------------- | ------------- |
-| create_missing_directories | Boolean (`true` or `false`) | `false`       |
-
-### Init Flags
-
-These are flags that you can add to the init command that is used to load your shell profile.
-For more info on loading your shell profile, check out [Adding Quicknav to Your Shell]().
-
-- `-c, --command`: Changes the command which is used to navigate to a shortcut. The default command is `nav`.
+For more info on quicknav such as cofiguration, [head over to our docs](https://quicknav.readthedocs.io/en/latest/) where you can find all of the
+information you might need.
 
 ## License
 

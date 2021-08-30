@@ -1,0 +1,24 @@
+.wy-side-nav-search input[type='text'] {
+  border-radius: 3px;
+}
+
+.wy-nav-content a,
+.wy-nav-content a:visited {
+  color: #3091d1;
+}
+
+/* override table width restrictions */
+.wy-table-responsive table td,
+.wy-table-responsive table th {
+  white-space: normal;
+}
+
+.wy-table-responsive {
+  margin-bottom: 24px;
+  max-width: 100%;
+  overflow: visible;
+}
+
+code {
+  white-space: normal !important;
+}
