@@ -23,6 +23,8 @@ In the future, support for more package managers will continue to grow.
 | Any (Rust Installed)     | Cargo           | :code:`cargo install quicknav`                                                                                             |
 +--------------------------+-----------------+----------------------------------------------------------------------------------------------------------------------------+
 
+.. _adding-quicknav-to-your-shell:
+
 Adding Quicknav to Your Shell
 -----------------------------
 
