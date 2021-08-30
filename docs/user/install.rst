@@ -68,11 +68,11 @@ Once you have a copy of the source code, you can install from source or build a 
 
 .. code:: bash
 
-    $ git clone https://github.com/MrDogeBro/quicknav
+    $ git clone https://github.com/MrDogeBro/quicknav.git
     $ cd quicknav
 
     # install from source
     $ cargo install --path .
 
-    # build a binary
-    $ cargo build --release
+    # build a binary - built file will be ./release/quicknav
+    $ cargo build --release --target-dir .
