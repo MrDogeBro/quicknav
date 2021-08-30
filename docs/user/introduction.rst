@@ -25,4 +25,4 @@ Basic Examples
     $ nav py     # go to python projects folder
     $ nav js     # go to javascript projects folder
 
-Ready to get started with quicknav, head over to the getting started page.
+Ready to get started with quicknav? Head over to the `getting started <install.html>`_ page.
