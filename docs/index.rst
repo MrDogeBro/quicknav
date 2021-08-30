@@ -31,6 +31,7 @@ User Guide
 
    user/introduction
    user/install
+   user/configuration
 
 Indices and tables
 ==================
