@@ -1,5 +1,7 @@
 # Quicknav
 
+[![Documentation Status](https://readthedocs.org/projects/quicknav/badge/?version=latest)](https://quicknav.readthedocs.io/en/latest/) [![License](https://img.shields.io/github/license/MrDogeBro/content_filter.svg)](https://github.com/MrDogeBro/quicknav/blob/master/LICENSE)
+
 A way to quickly navigate your filesystem from the command line.
 
 ## Table of Contents
