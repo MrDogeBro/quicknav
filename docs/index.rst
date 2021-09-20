@@ -6,9 +6,13 @@
 Quicknav Documentation
 ======================
 
-.. image:: https://readthedocs.org/projects/quicknav/badge/?version=latest
-   :target: https://quicknav.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/quicknav/badge/
+   :target: https://quicknav.readthedocs.io/
    :alt: Documentation Status
+
+.. image:: https://img.shields.io/github/license/MrDogeBro/quicknav.svg
+   :target: https://github.com/MrDogeBro/quicknav/blob/master/LICENSE
+   :alt: License
 
 Quicknav is a way to quickly navigate your filesystem from the command line.
 
