@@ -1,6 +1,6 @@
 # Quicknav
 
-[![Documentation Status](https://readthedocs.org/projects/quicknav/badge/?version=latest)](https://quicknav.readthedocs.io/en/latest/) [![License](https://img.shields.io/github/license/MrDogeBro/content_filter.svg)](https://github.com/MrDogeBro/quicknav/blob/master/LICENSE)
+[![Documentation Status](https://readthedocs.org/projects/quicknav/badge/)](https://quicknav.readthedocs.io/) [![License](https://img.shields.io/github/license/MrDogeBro/content_filter.svg)](https://github.com/MrDogeBro/quicknav/blob/master/LICENSE)
 
 A way to quickly navigate your filesystem from the command line.
 
@@ -84,7 +84,7 @@ quicknav init fish | source
 
 ## Docs
 
-For more info on quicknav such as cofiguration, [head over to our docs](https://quicknav.readthedocs.io/en/latest/) where you can find all of the
+For more info on quicknav such as cofiguration, [head over to our docs](https://quicknav.readthedocs.io/) where you can find all of the
 information you might need.
 
 ## License
