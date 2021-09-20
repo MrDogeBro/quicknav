@@ -41,7 +41,7 @@ impl Config {
         let config_path = format!("{}/quicknav", config_folder);
 
         if !Path::new(&config_path).exists() {
-            fs::create_dir(&config_path)?;
+            fs::create_dir_all(&config_path)?;
         }
 
         fs::write(
