@@ -3,7 +3,7 @@ name: Update labels for moved card
 on:
   project_card:
     types:
-      [moved]
+      [created, moved]
 
 jobs:
   automate-issue-labels:
