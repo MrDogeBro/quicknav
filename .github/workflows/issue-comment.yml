@@ -1,8 +1,8 @@
-name: Move issues with completed milestones in project board
+name: Handle comments on issues
 
 on:
   issue_comment:
-    types: [created]
+    types: [created, edited]
 
 jobs:
   automate-issue-done:
@@ -17,3 +17,31 @@ jobs:
           project: Main
           column: Done
           repo-token: ${{ secrets.GHPROJECT_TOKEN }}
+
+  assign-command:
+    if: ${{ github.event.comment.body == '@dogebroflow assign' ||
+      github.event.comment.body == '/assign' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign Issue
+        uses: pozil/auto-assign-issue@v1
+        if: ${{ github.event.issue.state == 'open' }}
+        with:
+          repo-token: ${{ secrets.GHPROJECT_TOKEN }}
+          assignees: ${{ github.event.sender.login }}
+
+      - name: Comment If Open
+        uses: peter-evans/create-or-update-comment@v1
+        if: ${{ github.event.issue.state == 'open' }}
+        with:
+          token: ${{ secrets.GHPROJECT_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: \@${{ github.event.sender.login }}, you are now assigned to this issue. You may unassign yourself at anytime via the GitHub web UI.
+
+      - name: Comment If Closed
+        uses: peter-evans/create-or-update-comment@v1
+        if: ${{ github.event.issue.state == 'closed' }}
+        with:
+          token: ${{ secrets.GHPROJECT_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: \@${{ github.event.sender.login }}, you cannot assign yourself to a closed issue!
