@@ -6,13 +6,13 @@ on:
 
 jobs:
   automate-issue-done:
+    if: ${{ github.event.sender.login == 'DogeBroFlow' &&
+      github.event.issue.state == 'closed' &&
+      github.event.issue.milestone.state == 'closed' &&
+      github.event.comment.body == format( 'This functionality has been released in v{0}.', github.event.issue.milestone.title ) }}
     runs-on: ubuntu-latest
     steps:
       - uses: alex-page/github-project-automation-plus@v0.8.1
-        if: ${{ github.event.sender.login == 'DogeBroFlow' &&
-          github.event.issue.state == 'closed' &&
-          github.event.issue.milestone.state == 'closed' &&
-          github.event.comment.body == format( 'This functionality has been released in v{0}.', github.event.issue.milestone.title ) }}
         with:
           project: Main
           column: Done
