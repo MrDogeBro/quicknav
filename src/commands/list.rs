@@ -27,6 +27,12 @@ pub fn list(shortcut: Option<String>) -> Result<i32> {
     } else {
         let config: config::Config = config::Config::load()?;
 
+        if config.shortcuts.is_empty() {
+            return Err(anyhow!(
+                "You haven't set up any shortcuts yet, get started with quicknav add."
+            ));
+        }
+
         let mut shortcut_list = Table::new();
         shortcut_list.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);
         shortcut_list.set_titles(row!["Name", "Shortcuts", "Shortcut Location"]);
