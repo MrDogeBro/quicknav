@@ -12,7 +12,7 @@ pub struct Shortcut {
     pub calls: Vec<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 pub struct Options {
     #[serde(default)]
     pub create_missing_directories: bool,
@@ -23,14 +23,6 @@ pub struct Config {
     pub shortcuts: Vec<Shortcut>,
     #[serde(default)]
     pub options: Options,
-}
-
-impl Default for Options {
-    fn default() -> Options {
-        Options {
-            create_missing_directories: false,
-        }
-    }
 }
 
 impl Config {

@@ -55,33 +55,33 @@ fn main() {
 fn run() -> Result<i32> {
     match Quicknav::from_args_safe() {
         Ok(cmd) => match cmd {
-            Quicknav::Get { location, search } => return commands::get(location, search),
-            Quicknav::List { shortcut } => return commands::list(shortcut),
+            Quicknav::Get { location, search } => commands::get(location, search),
+            Quicknav::List { shortcut } => commands::list(shortcut),
             Quicknav::Add {
                 call,
                 location,
                 name,
                 description,
-            } => return commands::add(call, location, name, description),
+            } => commands::add(call, location, name, description),
             Quicknav::Edit {
                 shortcut,
                 location,
                 name,
                 description,
-            } => return commands::edit(shortcut, location, name, description),
-            Quicknav::AddCall { shortcut, call } => return commands::add_call(shortcut, call),
-            Quicknav::Remove { shortcut } => return commands::remove(shortcut),
-            Quicknav::RemoveCall { call } => return commands::remove_call(call),
-            Quicknav::Config { option, new_value } => return commands::config(option, new_value),
-            Quicknav::Init { shell, command } => return commands::init(shell, command),
+            } => commands::edit(shortcut, location, name, description),
+            Quicknav::AddCall { shortcut, call } => commands::add_call(shortcut, call),
+            Quicknav::Remove { shortcut } => commands::remove(shortcut),
+            Quicknav::RemoveCall { call } => commands::remove_call(call),
+            Quicknav::Config { option, new_value } => commands::config(option, new_value),
+            Quicknav::Init { shell, command } => commands::init(shell, command),
         },
         Err(e) => {
             if e.kind == ErrorKind::VersionDisplayed {
-                println!("");
+                println!();
                 return Ok(0);
             }
 
-            return Err(anyhow!(e));
+            Err(anyhow!(e))
         }
     }
 }

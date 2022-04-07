@@ -13,9 +13,9 @@ pub fn get(location: String, search: bool) -> Result<i32> {
 
         for shortcut in &config.shortcuts {
             if shortcut.calls.iter().any(|c| c.starts_with(&location)) {
-                for c in shortcut.calls.to_owned() {
+                for c in shortcut.calls.iter().cloned() {
                     if c.starts_with(&location) {
-                        possible_shortcuts.push(c.to_string());
+                        possible_shortcuts.push(c);
                         break;
                     }
                 }
@@ -28,10 +28,10 @@ pub fn get(location: String, search: bool) -> Result<i32> {
 
     for shortcut in config.shortcuts {
         if shortcut.calls.iter().any(|c| c == &location) {
-            let shortcut_location = shortcut.location.replace("~", &var("HOME").unwrap());
+            let shortcut_location = shortcut.location.replace('~', &var("HOME").unwrap());
 
             if Path::new(&shortcut_location).exists() {
-                println!("{}", shortcut.location.replace("~", &var("HOME").unwrap()));
+                println!("{}", shortcut.location.replace('~', &var("HOME").unwrap()));
                 return Ok(0);
             }
 
@@ -44,12 +44,12 @@ pub fn get(location: String, search: bool) -> Result<i32> {
 
             create_dir_all(&shortcut_location)?;
 
-            println!("{}", shortcut.location.replace("~", &var("HOME").unwrap()));
+            println!("{}", shortcut.location.replace('~', &var("HOME").unwrap()));
             return Ok(0);
         }
     }
 
-    Err(anyhow!(format!(
+    Err(anyhow!(
         "Navigation shortcut not found. Use quicknav list to view all your shortcuts."
-    )))
+    ))
 }
