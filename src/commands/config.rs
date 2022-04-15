@@ -21,7 +21,7 @@ pub fn config(option: Option<String>, new_value: Option<String>) -> Result<i32> 
                     config.options.create_missing_directories = string::to_bool(&new_value)?;
                     value = "create_missing_directories";
                 }
-                _ => return Err(anyhow!(format!("Option not found or is not valid. Use quicknav config to view available options.")))
+                _ => return Err(anyhow!("Option not found or is not valid. Use quicknav config to view available options.".to_string()))
             }
 
             println!(
@@ -43,7 +43,7 @@ pub fn config(option: Option<String>, new_value: Option<String>) -> Result<i32> 
                 ]);
             }
             _ => {
-                return Err(anyhow!(format!("Option not found or is not valid. Use quicknav config to view available options.")));
+                return Err(anyhow!("Option not found or is not valid. Use quicknav config to view available options.".to_string()));
             }
         }
 

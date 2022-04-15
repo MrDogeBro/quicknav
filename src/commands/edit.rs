@@ -37,7 +37,7 @@ pub fn edit(
                     shortcut_conf.location = cwd.to_owned();
                 } else if location.starts_with(&env::var("HOME").unwrap()) {
                     shortcut_conf.location =
-                        str::replace(&location, &env::var("HOME").unwrap(), "~");
+                        str::replace(location, &env::var("HOME").unwrap(), "~");
                 } else {
                     shortcut_conf.location = str::replace(
                         &fs::canonicalize(location)?.display().to_string(),

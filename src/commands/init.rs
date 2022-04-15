@@ -11,7 +11,7 @@ fn get_profile(profile: &str, command: &str) -> Result<String> {
     if profile == "default" {
         let shell_profile = include_str!("../../shell/default.txt");
 
-        if command.len() > 0 {
+        if !command.is_empty() {
             let new_command = format!("function {}", command);
             return Ok(shell_profile.replace("function nav", &new_command));
         }
@@ -20,7 +20,7 @@ fn get_profile(profile: &str, command: &str) -> Result<String> {
     } else if profile == "fish" {
         let shell_profile = include_str!("../../shell/fish.txt");
 
-        if command.len() > 0 {
+        if !command.is_empty() {
             let new_command = format!("function {}", command);
             return Ok(shell_profile.replace("function nav", &new_command));
         }
