@@ -56,7 +56,7 @@ fn run() -> Result<i32> {
     match Quicknav::from_args_safe() {
         Ok(cmd) => match cmd {
             Quicknav::Get { location, search } => commands::get(location, search),
-            Quicknav::List { shortcut } => commands::list(shortcut),
+            Quicknav::List { shortcut, quiet } => commands::list(shortcut, quiet),
             Quicknav::Add {
                 call,
                 location,
