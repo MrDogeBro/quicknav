@@ -16,6 +16,9 @@ pub enum Quicknav {
     List {
         /// The shortcut to search for (by name)
         shortcut: Option<String>,
+        /// Display only the shortcut path
+        #[structopt(short = "q", long = "quiet")]
+        quiet: bool,
     },
     /// Adds a new shortcut
     #[structopt(alias = "new")]
