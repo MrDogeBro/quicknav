@@ -84,7 +84,7 @@ quicknav init fish | source
 
 ## Docs
 
-For more info on quicknav such as cofiguration, [head over to our docs](https://quicknav.readthedocs.io/) where you can find all of the
+For more info on quicknav such as configuration, [head over to our docs](https://quicknav.readthedocs.io/) where you can find all of the
 information you might need.
 
 ## License
