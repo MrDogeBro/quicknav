@@ -9,7 +9,7 @@ fn get_relevant_shortcuts(
 ) -> Result<Vec<config::Shortcut>> {
     if let Some(shortcut_name) = shortcut {
         for shortcut_conf in config.shortcuts {
-            if shortcut_conf.name == shortcut_name {
+            if shortcut_conf.name.to_lowercase() == shortcut_name.to_lowercase() {
                 return Ok(vec![shortcut_conf]);
             }
         }
